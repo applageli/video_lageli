@@ -27,7 +27,7 @@
         <button class="btn primary" id="btn-start-recording">Jogar</button>
       </div>
       <div class="3 col">        
-        <button class="btn primary" id="btn-stop-recording" disabled style="display: none">Ver pontuação</button>
+        <button class="btn primary" id="btn-stop-recording" disabled style="display: none">Salvar Video</button>
       </div>
       <div class="8 col"></div>        
     </div>
@@ -311,6 +311,8 @@
           $('#recebeTotal').hide();
           $('#div_fotos').show(); 
           $('#textoJogo').html('Você não econtrou o ❤ Lageli, mas você já tinha ele!');
+          $('#btn-start-recording').hide();
+          $('#btn-stop-recording').show();
         }
       }
     });
