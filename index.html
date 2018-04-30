@@ -1,69 +1,65 @@
-<style>
-    html, body {
-        margin: 0!important;
-        padding: 0!important;
-        overflow: hidden!important;
-        width: 100%;
-    }
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Encontre o amor Lageli</title>
+</head>
+<body>
+  
+  <button id="btn-start-recording">GRAVAR</button>
+  <button id="btn-stop-recording" disabled>PARAR</button>
+  <hr>
+  <video controls autoplay></video>
+  
+  <script src="js/RecordRTC.js"></script>
+  <script src="js/adapter-latest.js"></script>
+  <script>
+  var video = document.querySelector('video');
 
-<title>Video Recording | RecordRTC</title>
-<h1>Simple Video Recording using RecordRTC</h1>
+  function captureCamera(callback) {
+      navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function(camera) {
+          callback(camera);
+      }).catch(function(error) {
+          alert('Unable to capture your camera. Please check console logs.');
+          console.error(error);
+      });
+  }
 
-<br>
+  function stopRecordingCallback() {
+      video.src = video.srcObject = null;
+      video.src = URL.createObjectURL(recorder.getBlob());
+      video.play();
+      recorder.camera.stop();
+      recorder.destroy();
+      recorder = null;
+  }
 
-<button id="btn-start-recording">Start Recording</button>
-<button id="btn-stop-recording" disabled>Stop Recording</button>
+  var recorder; // globally accessible
 
-<hr>
-<video controls autoplay></video>
+  document.getElementById('btn-start-recording').onclick = function() {
+      this.disabled = true;
+      captureCamera(function(camera) {
+          setSrcObject(camera, video);
+          video.play();
 
-<script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
-<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-<script>
-var video = document.querySelector('video');
+          recorder = RecordRTC(camera, {
+              type: 'video'
+          });
 
-function captureCamera(callback) {
-    navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function(camera) {
-        callback(camera);
-    }).catch(function(error) {
-        alert('Unable to capture your camera. Please check console logs.');
-        console.error(error);
-    });
-}
+          recorder.startRecording();
 
-function stopRecordingCallback() {
-    video.src = video.srcObject = null;
-    video.src = URL.createObjectURL(recorder.getBlob());
-    video.play();
-    recorder.camera.stop();
-    recorder.destroy();
-    recorder = null;
-}
+          // release camera on stopRecording
+          recorder.camera = camera;
 
-var recorder; // globally accessible
+          document.getElementById('btn-stop-recording').disabled = false;
+      });
+  };
 
-document.getElementById('btn-start-recording').onclick = function() {
-    this.disabled = true;
-    captureCamera(function(camera) {
-        setSrcObject(camera, video);
-        video.play();
+  document.getElementById('btn-stop-recording').onclick = function() {
+      this.disabled = true;
+      recorder.stopRecording(stopRecordingCallback);
+  };
+  </script>
+</body>
+</html>
 
-        recorder = RecordRTC(camera, {
-            type: 'video'
-        });
-
-        recorder.startRecording();
-
-        // release camera on stopRecording
-        recorder.camera = camera;
-
-        document.getElementById('btn-stop-recording').disabled = false;
-    });
-};
-
-document.getElementById('btn-stop-recording').onclick = function() {
-    this.disabled = true;
-    recorder.stopRecording(stopRecordingCallback);
-};
-</script>
