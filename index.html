@@ -3,6 +3,15 @@
 <head>
     <meta charset="utf-8">
     <title>Encontre o amor Lageli</title>
+    <style type="text/css">
+      video {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 300px;
+        display: none;
+      }
+    </style>
 </head>
 <body>
   
@@ -11,54 +20,61 @@
   <hr>
   <video controls autoplay></video>
   
+  <script src="js/jquery.js"></script>
   <script src="js/RecordRTC.js"></script>
   <script src="js/adapter-latest.js"></script>
   <script>
-  var video = document.querySelector('video');
 
-  function captureCamera(callback) {
+    $(function() {
+      $('video').show();
+    });
+
+    var video = document.querySelector('video');
+
+    function captureCamera(callback) {
       navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function(camera) {
-          callback(camera);
+        callback(camera);
       }).catch(function(error) {
-          alert('Unable to capture your camera. Please check console logs.');
-          console.error(error);
+        alert('Unable to capture your camera. Please check console logs.');
+        console.error(error);
       });
-  }
+    }
 
-  function stopRecordingCallback() {
+    function stopRecordingCallback() {
       video.src = video.srcObject = null;
       video.src = URL.createObjectURL(recorder.getBlob());
       video.play();
       recorder.camera.stop();
       recorder.destroy();
       recorder = null;
-  }
+    }
 
-  var recorder; // globally accessible
+    var recorder; // globally accessible
 
-  document.getElementById('btn-start-recording').onclick = function() {
+    document.getElementById('btn-start-recording').onclick = function() {
+
       this.disabled = true;
       captureCamera(function(camera) {
-          setSrcObject(camera, video);
-          video.play();
+        setSrcObject(camera, video);
+        video.play();
 
-          recorder = RecordRTC(camera, {
-              type: 'video'
-          });
+        recorder = RecordRTC(camera, {
+            type: 'video'
+        });
 
-          recorder.startRecording();
+        recorder.startRecording();
 
-          // release camera on stopRecording
-          recorder.camera = camera;
+        // release camera on stopRecording
+        recorder.camera = camera;
 
-          document.getElementById('btn-stop-recording').disabled = false;
+        document.getElementById('btn-stop-recording').disabled = false;
       });
-  };
+    };
 
-  document.getElementById('btn-stop-recording').onclick = function() {
+    document.getElementById('btn-stop-recording').onclick = function() {
       this.disabled = true;
       recorder.stopRecording(stopRecordingCallback);
-  };
+    };
   </script>
 </body>
 </html>
