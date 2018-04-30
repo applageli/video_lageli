@@ -9,16 +9,28 @@
 <body>
   
   <div class="c">
-    <div class="row">
+    
+    <div align="center" class="row">
       <div class="12 col">
-        <img src="img/logo.png" />
+        <img src="img/logo.png" width="200" />
       </div>
     </div>
+    <div class="row">
+      <div class="3 col">        
+        <button id="btn-start-recording">GRAVAR</button>
+      </div>
+      <div class="3 col">        
+        <button id="btn-stop-recording" disabled>PARAR</button>
+      </div>
+    </div>
+    <div align="center" class="row">
+      <div class="12 col">
+        jogo
+      </div>
+    </div>
+
   </div>
 
-  <button id="btn-start-recording">GRAVAR</button>
-  <button id="btn-stop-recording" disabled>PARAR</button>
-  <hr>
   <video controls autoplay></video>
   
   <script src="js/jquery.js"></script>
