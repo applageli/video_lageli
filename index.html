@@ -295,6 +295,8 @@
 
     document.getElementById('btn-start-recording').onclick = function() {
 
+      selecionou.pause();
+      selecionou.play();
       boolPlay = true;
       this.disabled = true;
       captureCamera(function(camera) {
@@ -315,6 +317,8 @@
     };
 
     document.getElementById('btn-stop-recording').onclick = function() {
+      selecionou.pause();
+      selecionou.play();
       $('video').show();
       boolPlay = false;
       this.disabled = true;
@@ -356,6 +360,8 @@
             $('#textoJogo').html('Você não econtrou o <span style="color:#ff5b56;">❤</span> Lageli, mas você já tinha ele!');
             $('#btn-start-recording').hide();
             $('#btn-stop-recording').show();
+            selecionou.pause();
+            selecionou.play();
             musica.play();
           },3600);
         }
