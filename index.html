@@ -248,6 +248,11 @@
     <source src="media/lageli.mp3" type="audio/mpeg">
   </audio>
 
+  <audio id="selecionou">
+    <source src="media/selecionou.ogg" type="audio/ogg">
+    <source src="media/selecionou.mp3" type="audio/mpeg">
+  </audio>
+
   <script src="js/jquery.js"></script>
   <script src="js/RecordRTC.js"></script>
   <script src="js/adapter-latest.js"></script>
@@ -324,6 +329,8 @@
 
           if ($(this).html().length == 0) {
 
+            selecionou.stop();
+            selecionou.play();
             $(this).html( arrayEmoji[ numeroRandomico(0,45) ] );
           }
         }
