@@ -10,7 +10,41 @@
 </head>
 <body>
   
-  <div id="primeiraTela" class="c">
+  <div id="telaLogin" class="c">
+
+    <div align="center" class="row">
+      <div class="12 col">
+        <img src="img/logo.png" width="200" />
+      </div>
+    </div>
+
+    <div align="left" class="row">
+      <div align="left" class="5 col"></div>
+      <div align="left" class="2 col">
+        <input type="text" id="txtusuario" placeholder="Usuário" style="border-radius: 20px;border: none;padding-top: 4px;font-family: Product Sans;font-size: 20px;padding-bottom: 4px;padding-left: 10px;outline: none;" autofocus />
+      </div>
+      <div align="left" class="5 col"></div>
+    </div>
+
+    <div align="left" class="row">
+      <div align="left" class="5 col"></div>
+      <div align="left" class="2 col">
+        <input type="password" id="txtsenha" placeholder="Senha" style="border-radius: 20px;border: none;padding-top: 4px;font-family: Product Sans;font-size: 20px;padding-bottom: 4px;padding-left: 10px;outline: none;" />
+      </div>
+      <div align="left" class="5 col"></div>
+    </div>
+
+    <div align="left" class="row">
+      <div align="left" class="5 col"></div>
+      <div align="left" class="2 col">
+        <button id="btnEntrar" class="btn primary" style="width: 100%;outline: none;cursor: pointer;">entrar</button>
+      </div>
+      <div align="left" class="5 col"></div>
+    </div>
+
+  </div>
+
+  <div id="primeiraTela" class="c" style="display: none">
 
     <div align="center" class="row">
       <div class="12 col">
@@ -21,16 +55,12 @@
     <div class="row">
       <div class="12 col">
         <H3>Selecione a consultora:</H3>
-        <select id="selectConsultoras">
-          <option value="">Selecione</option>
-          <option value="1">Ana Clara Gimenez</option>
-          <option value="2">Fabiana José Carvalho</option>
-          <option value="3">Vânia Pereira</option>
-        </select>
+        <select id="selectConsultoras" style="font-family: Product Sans"></select>
       </div>
     </div>
 
   </div>
+
   <div id="segundaTela" class="c" style="display: none;">
     
     <div align="center" class="row">
@@ -280,7 +310,24 @@
     }
     
     $(function() {
-      // $('video').show();
+      
+      if (typeof localStorage.string_array_consultoras != 'undefined') {
+        $('#telaLogin').hide();
+        $('#primeiraTela').show();
+
+        var linhas = '';
+
+        var arrayConsultoras = JSON.parse(localStorage.string_array_consultoras);
+
+        linhas += '<option value="">Selecione</option>';
+        for (var i in arrayConsultoras) {
+          var e = arrayConsultoras[i];
+
+          linhas += '<option value="'+e.idpessoa+'">'+e.nome+'</option>';
+        }
+
+        $('#selectConsultoras').html(linhas);
+      }
     });
 
     var video = document.querySelector('video');
@@ -391,9 +438,41 @@
       $('#primeiraTela').hide();
       $('#segundaTela').show();
     });
+
+    $('#btnEntrar').click(function() {
+      
+      var txtusuario = $('#txtusuario').val();
+      var txtsenha = $('#txtsenha').val();
+
+      if ((txtusuario.length > 0) && (txtsenha.length > 0)) {
+
+        jQuery.ajax({
+          type: 'POST',
+          data: {
+            'usuario': txtusuario,
+            'senha': txtsenha,
+            'dominio': 'grupoduzani'
+          },
+          url: 'http://sistema.duzani.com.br/src_lageli/login.php',
+          success: function (data) {
+
+            if(data.length > 0) {
+
+              localStorage.string_array_consultoras = data;
+              location.reload();
+            } else {
+
+              alert('Usuário ou senha incorreto!');
+            }
+          }
+        });
+      } else {
+
+        alert('Preencha os campos corretamente!');
+      }
+
+    });
   </script>
-
-
 </body>
 </html>
 
