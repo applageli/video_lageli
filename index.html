@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <title>Encontre o amor Lageli</title>
     <link rel="stylesheet" type="text/css" href="css/lit.css">
+    <link rel="stylesheet" type="text/css" href="css/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 </head>
 <body>
   
@@ -227,15 +229,22 @@
 
       </div>
     </div>
-    <div id="div_fotos" align="center" class="row" style="display: none;">
-      <div align="center" class="4 col">
-        <img src="img/foto1.jpeg" width="200" />
-      </div>
-      <div align="center" class="4 col">
-        <img src="img/foto2.jpeg" width="200" />
-      </div>
-      <div align="center" class="4 col">
-        <img src="img/foto3.jpeg" width="200" />
+
+    <div id="div_fotos" class="swiper-container" style="display: none;">
+      <div class="swiper-wrapper">
+        
+        <div class="swiper-slide">
+          <img src="img/foto1.jpeg" width="200" />          
+        </div>
+
+        <div class="swiper-slide">
+          <img src="img/foto2.jpeg" width="200" />          
+        </div>
+
+        <div class="swiper-slide">
+          <img src="img/foto3.jpeg" width="200" />          
+        </div>
+
       </div>
     </div>
 
@@ -255,8 +264,11 @@
 
   <script src="js/jquery.js"></script>
   <script src="js/RecordRTC.js"></script>
+  <script src="js/swiper.min.js"></script>
   <script src="js/adapter-latest.js"></script>
   <script>
+
+    var mySwiper;
 
     var arrayEmoji = ['👏','😔','☠','🎪','🤦','🏻','♂','🌿','😇','😶','👣','👻','🌭','🙃','🎈','👀','😡','😱','🏻','👩','🏻','🔧','🌂','👠','🎩','🐏','🦍','🌏','🌟','🌈','🔥','🍵','🍭','🎾','🥅','🚲','🚆','🚂','💻','🕰','📓','🔏','🈷','🏖','🚧'];
     var boolPlay = false;
@@ -295,8 +307,6 @@
 
     document.getElementById('btn-start-recording').onclick = function() {
 
-      selecionou.pause();
-      selecionou.play();
       boolPlay = true;
       this.disabled = true;
       captureCamera(function(camera) {
@@ -362,6 +372,16 @@
             selecionou.pause();
             selecionou.play();
             musica.play();
+            mySwiper = new Swiper ('.swiper-container', {
+              spaceBetween: 30,
+              centeredSlides: true,
+              autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+              },
+              loop: true,
+              effect: 'flip' //fade, cube, coverflow, flip
+            });
           },3600);
         }
       }
