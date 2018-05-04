@@ -396,13 +396,13 @@
       
       arrayMidias.push(str_imagem);
 
-      if (arrayMidias.length <= 2) {
+      // if (arrayMidias.length <= 2) {
 
         localStorage[$('#selectConsultorasCadastro :selected').val()] = JSON.stringify(arrayMidias);
         preencheTabela();
         
         
-      }
+      // }
     }
 
     function preencheTabela() {
