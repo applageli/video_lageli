@@ -9,6 +9,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 </head>
 <body>
+  <div class="c">
+    <div align="right" class="row">
+      <div class="1 col"></div>
+      <div class="11 col">
+        <span id="escondeisso" style="font-family:Product Sans;display: none ">Bem vindo! <span id="botaoSairNome"></span>, </span> <a id="botaoSair" href="javascript: delete localStorage.dados;location.reload()" style="display: none;">sair</a>
+      </div>
+    </div>
+  </div>
   
   <div id="telaLogin" class="c">
 
@@ -21,7 +29,7 @@
     <div align="left" class="row">
       <div align="left" class="5 col"></div>
       <div align="left" class="2 col">
-        <input type="text" id="txtusuario" placeholder="Usuário" style="border-radius: 20px;border: none;padding-top: 4px;font-family: Product Sans;font-size: 20px;padding-bottom: 4px;padding-left: 10px;outline: none;" autofocus />
+        <input type="text" id="txtusuario" placeholder="Usuário do Agely" style="border-radius: 20px;border: none;padding-top: 4px;font-family: Product Sans;font-size: 20px;padding-bottom: 4px;padding-left: 10px;outline: none;" autofocus />
       </div>
       <div align="left" class="5 col"></div>
     </div>
@@ -61,11 +69,8 @@
           <div class="6 col">
             <select id="selectConsultorasCadastro" style="font-family: Product Sans"></select>
           </div>
-          <div class="3 col">
-            <input type="file" id="arquivoMidia">
-          </div>
-          <div class="3 col">
-            <button class="btn primary">cadastrar</button>
+          <div class="6 col">
+            <input type="file" id="arquivoMidia" style="font-family: Product Sans">
           </div>
         </div>
 
@@ -75,9 +80,11 @@
             <th>midia 1</th>
             <th>midia 2</th>
             <th>midia 3</th>
+            <th></th>
           </thead>
           <tbody></tbody>
         </table>
+
       </div>
     </div>
 
@@ -119,7 +126,7 @@
         <button class="btn primary" id="btn-start-recording">Jogar</button>
       </div>
       <div class="3 col">        
-        <button class="btn primary" id="btn-stop-recording" disabled style="display: none">Salvar Video</button>
+        <button class="btn primary" id="btn-stop-recording" disabled style="display: none">Salvar Jogo</button>
       </div>
       <div class="8 col"></div>        
     </div>
@@ -303,15 +310,15 @@
       <div class="swiper-wrapper">
         
         <div class="swiper-slide">
-          <img src="img/foto1.jpeg" width="200" />          
+          <img id="recebeFoto1" width="200" />          
         </div>
 
         <div class="swiper-slide">
-          <img src="img/foto2.jpeg" width="200" />          
+          <img id="recebeFoto2" width="200" />          
         </div>
 
         <div class="swiper-slide">
-          <img src="img/foto3.jpeg" width="200" />          
+          <img id="recebeFoto3" width="200" />          
         </div>
 
       </div>
@@ -335,38 +342,86 @@
   <script src="js/RecordRTC.js"></script>
   <script src="js/swiper.min.js"></script>
   <script src="js/adapter-latest.js"></script>
+  <script src="js/dados.js"></script>
   <script>
 
     var mySwiper;
-
+    var dados;
     var arrayEmoji = ['👏','😔','☠','🎪','🤦','🏻','♂','🌿','😇','😶','👣','👻','🌭','🙃','🎈','👀','😡','😱','🏻','👩','🏻','🔧','🌂','👠','🎩','🐏','🦍','🌏','🌟','🌈','🔥','🍵','🍭','🎾','🥅','🚲','🚆','🚂','💻','🕰','📓','🔏','🈷','🏖','🚧'];
     var boolPlay = false;
     var musica = document.getElementById("musica"); 
     var selecionou = document.getElementById("selecionou"); 
 
-    function insertMidia(arrayMidia) {
+    function jogar(id) {
+
+      var arrayMidias = JSON.parse(localStorage[id]);
+      $('#recebeFoto1').attr('src',arrayMidias[0]);
+      $('#recebeFoto2').attr('src',arrayMidias[1]);
+      $('#recebeFoto3').attr('src',arrayMidias[2]);
+      $('#telaCadastro').hide();
+      $('#segundaTela').show();
+    }
+
+    var arrayMidias = [];
+    
+    function encontraSalvo(idpessoa) {
+      var retorno = false;
+
+      if (typeof localStorage[idpessoa] != 'undefined') {
+        retorno = true;
+      }
+
+      return retorno;
+    }
+
+    function salvaMidia(str_imagem) {
+      
+      arrayMidias.push(str_imagem);
+
+      if (arrayMidias.length <= 3) {
+
+        localStorage[$('#selectConsultorasCadastro :selected').val()] = JSON.stringify(arrayMidias);
+        
+        preencheTabela();
+      }
+    }
+
+    function preencheTabela() {
       var linhas = '';
+      for (var i in arrayPessoas) {
 
-      for (var i in arrayMidia) {
-        e = arrayMidia[i];
+        var e = arrayPessoas[i];
+        
+        if (( encontraSalvo(e.idpessoa) === true )&&(e.idempresa == dados.idempresa)) {
 
-        linhas += '<tr>';
-          linhas += '<td>';
-            linhas += e.nome;
-          linhas += '</td>';
-          linhas += '<td>';
-            linhas += e.midia1;
-          linhas += '</td>';
-          linhas += '<td>';
-            linhas += e.midia2;
-          linhas += '</td>';
-          linhas += '<td>';
-            linhas += e.midia3;
-          linhas += '</td>';
-        linhas += '</tr>';
+          linhas += '<tr>';
+            linhas += '<td>';
+              linhas += e.nome;
+            linhas += '</td>';
+
+            var arrayFotos = JSON.parse(localStorage[e.idpessoa]);
+            for (var i in arrayFotos) {
+              var string = arrayFotos[i];
+              
+              linhas += '<td>';
+                linhas += '<img src="'+string+'" width="40">';
+              linhas += '</td>';
+            }
+
+          if (arrayFotos.length == 3) {
+
+            linhas += '<td><button onclick="jogar('+e.idpessoa+');" class="btn primary">jogar!</button></td>';
+          } else {
+
+            linhas += '<td></td>';
+          }  
+          
+          linhas += '</tr>';
+        }
       }
 
       $('#tabelaMidias tbody').html(linhas);
+      $('#arquivoMidia').val('');
     }
 
     function numeroRandomico(maximum, minimum) {
@@ -375,13 +430,19 @@
     
     $(function() {
       
-      if (typeof localStorage.string_array_consultoras != 'undefined') {
+      if (typeof localStorage.dados != 'undefined') {
+        
+        dados = JSON.parse(localStorage.dados);
         $('#telaLogin').hide();
         $('#telaCadastro').show();
+        $('#botaoSair').show();
+        $('#escondeisso').show();
+        $('#botaoSairNome').html(dados.usuario);
+
 
         var linhas = '';
 
-        var arrayConsultoras = JSON.parse(localStorage.string_array_consultoras);
+        var arrayConsultoras = $.grep(arrayPessoas, function(e){ return e.idempresa == dados.idempresa });
 
         linhas += '<option value="">Selecione a consultora:</option>';
         for (var i in arrayConsultoras) {
@@ -392,10 +453,7 @@
 
         $('#selectConsultoras').html(linhas);
         $('#selectConsultorasCadastro').html(linhas);
-      } else {
-
-        $('#telaLogin').hide();
-        $('#segundaTela').show();
+        preencheTabela();
       }
     });
 
@@ -445,6 +503,7 @@
     document.getElementById('btn-stop-recording').onclick = function() {
       
       $('video').show();
+      $('#div_fotos').hide();
       boolPlay = false;
       this.disabled = true;
       recorder.stopRecording(stopRecordingCallback);
@@ -477,7 +536,7 @@
 
         if (contaX === 5) {
           
-          setTimeout(function(){
+          setTimeout(function() {
 
             $('#div_jogo').hide();
             $('#recebeTotal').hide();
@@ -515,32 +574,48 @@
 
       if ((txtusuario.length > 0) && (txtsenha.length > 0)) {
 
-        jQuery.ajax({
-          type: 'POST',
-          data: {
-            'usuario': txtusuario,
-            'senha': txtsenha,
-            'dominio': 'grupoduzani'
-          },
-          url: 'http://sistema.duzani.com.br/src_lageli/login.php',
-          success: function (data) {
+        var dados_login = $.grep(arrayUsuarios, function(e){ return ((e.usuario == txtusuario)&&(e.senha == txtsenha))});
 
-            if(data.length > 0) {
+        if (dados_login.length > 0) {
 
-              localStorage.string_array_consultoras = data;
-              location.reload();
-            } else {
+          localStorage.dados = JSON.stringify(dados_login[0]);
+          location.reload();
 
-              alert('Usuário ou senha incorreto!');
-            }
-          }
-        });
+        } else {
+          alert('senha incorreta!');
+        }
       } else {
 
         alert('Preencha os campos corretamente!');
       }
 
     });
+
+    $('#arquivoMidia').change(function() {
+      
+      var $i = $( '#arquivoMidia' ), // Put file input ID here
+      input = $i[0]; // Getting the element from jQuery
+      if ( input.files && input.files[0] ) {
+        file = input.files[0]; // The file
+        fr = new FileReader(); // FileReader instance
+        fr.onload = function () {
+          
+          if ($('#selectConsultorasCadastro').val().length > 0) {
+
+            salvaMidia(fr.result);
+          } else {
+            alert('selecione a consultora');
+          }
+
+        };
+        //fr.readAsText( file );
+        fr.readAsDataURL( file );
+      } else {
+        alert('selecione uma foto!');
+      }
+
+    });
+
   </script>
 </body>
 </html>
