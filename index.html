@@ -360,6 +360,24 @@
       $('#recebeFoto3').attr('src',arrayMidias[2]);
       $('#telaCadastro').hide();
       $('#segundaTela').show();
+
+      boolPlay = true;
+      this.disabled = true;
+      captureCamera(function(camera) {
+        setSrcObject(camera, video);
+        video.play();
+
+        recorder = RecordRTC(camera, {
+            type: 'video'
+        });
+
+        recorder.startRecording();
+
+        // release camera on stopRecording
+        recorder.camera = camera;
+
+        document.getElementById('btn-stop-recording').disabled = false;
+      });
     }
 
     var arrayMidias = [];
@@ -479,11 +497,6 @@
 
     var recorder; // globally accessible
 
-    document.getElementById('btn-start-recording').onclick = function() {
-
-      
-    };
-
     document.getElementById('btn-stop-recording').onclick = function() {
       
       $('video').show();
@@ -540,24 +553,6 @@
               },
               loop: true,
               effect: 'flip' //fade, cube, coverflow, flip
-            });
-
-            boolPlay = true;
-            this.disabled = true;
-            captureCamera(function(camera) {
-              setSrcObject(camera, video);
-              video.play();
-
-              recorder = RecordRTC(camera, {
-                  type: 'video'
-              });
-
-              recorder.startRecording();
-
-              // release camera on stopRecording
-              recorder.camera = camera;
-
-              document.getElementById('btn-stop-recording').disabled = false;
             });
           },3600);
         }
