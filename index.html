@@ -44,6 +44,45 @@
 
   </div>
 
+  <div id="telaCadastro" class="c" style="display: none">
+    
+    <div align="center" class="row">
+      <div class="12 col">
+        <img src="img/logo.png" width="200" />
+      </div>
+    </div>  
+
+    <div class="row" style="background: #f1f1f0;color: #000;">
+      <div class="12 col">
+        <h2>Cadastro</h2>
+        <p>Cadastre as fotos ou videos que aparecerão no jogo para cada uma de suas consultoras.</p>
+                
+        <div class="row">
+          <div class="6 col">
+            <select id="selectConsultorasCadastro" style="font-family: Product Sans"></select>
+          </div>
+          <div class="3 col">
+            <input type="file" id="arquivoMidia">
+          </div>
+          <div class="3 col">
+            <button class="btn primary">cadastrar</button>
+          </div>
+        </div>
+
+        <table id="tabelaMidias" class="w-100">
+          <thead>
+            <th>Consultora</th>
+            <th>midia 1</th>
+            <th>midia 2</th>
+            <th>midia 3</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
   <div id="primeiraTela" class="c" style="display: none">
 
     <div align="center" class="row">
@@ -305,6 +344,31 @@
     var musica = document.getElementById("musica"); 
     var selecionou = document.getElementById("selecionou"); 
 
+    function insertMidia(arrayMidia) {
+      var linhas = '';
+
+      for (var i in arrayMidia) {
+        e = arrayMidia[i];
+
+        linhas += '<tr>';
+          linhas += '<td>';
+            linhas += e.nome;
+          linhas += '</td>';
+          linhas += '<td>';
+            linhas += e.midia1;
+          linhas += '</td>';
+          linhas += '<td>';
+            linhas += e.midia2;
+          linhas += '</td>';
+          linhas += '<td>';
+            linhas += e.midia3;
+          linhas += '</td>';
+        linhas += '</tr>';
+      }
+
+      $('#tabelaMidias tbody').html(linhas);
+    }
+
     function numeroRandomico(maximum, minimum) {
       return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     }
@@ -313,13 +377,13 @@
       
       if (typeof localStorage.string_array_consultoras != 'undefined') {
         $('#telaLogin').hide();
-        $('#primeiraTela').show();
+        $('#telaCadastro').show();
 
         var linhas = '';
 
         var arrayConsultoras = JSON.parse(localStorage.string_array_consultoras);
 
-        linhas += '<option value="">Selecione</option>';
+        linhas += '<option value="">Selecione a consultora:</option>';
         for (var i in arrayConsultoras) {
           var e = arrayConsultoras[i];
 
@@ -327,6 +391,11 @@
         }
 
         $('#selectConsultoras').html(linhas);
+        $('#selectConsultorasCadastro').html(linhas);
+      } else {
+
+        $('#telaLogin').hide();
+        $('#segundaTela').show();
       }
     });
 
