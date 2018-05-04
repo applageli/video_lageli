@@ -396,11 +396,14 @@
       
       arrayMidias.push(str_imagem);
 
-      if (arrayMidias.length <= 3) {
+      if (arrayMidias.length <= 2) {
 
         localStorage[$('#selectConsultorasCadastro :selected').val()] = JSON.stringify(arrayMidias);
-        
         preencheTabela();
+        
+        if (arrayMidias.length == 2) {
+          arrayMidias = [];
+        }
       }
     }
 
