@@ -63,27 +63,25 @@
     <div class="row" style="background: #f1f1f0;color: #000;">
       <div class="12 col">
         <h2>Cadastro</h2>
-        <p>Cadastre as fotos ou videos que aparecerão no jogo para cada uma de suas consultoras.</p>
+        <p>Cadastre as fotos que aparecerão no jogo para cada uma de suas consultoras.</p>
                 
         <div class="row">
-          <div class="6 col">
-            <select id="selectConsultorasCadastro" style="font-family: Product Sans"></select>
-          </div>
-          <div class="6 col">
-            <input type="file" id="arquivoMidia" style="font-family: Product Sans">
+          <div class="12 col">
+            <!-- <select id="selectConsultorasCadastro" style="font-family: Product Sans"></select> -->
+            <input type="search" autocomplete="off" autocorrect="off" autocapitalize="off" class="w-100" placeholder="pesquisar pelo nome da consultora" id="txtPesquisar" style="font-family: Product Sans" />
+            <p style="position: relative;
+    bottom: 18px;
+    font-size: 14px;
+    COLOR: darkgray;">pressione enter para pesquisar</p>
+            <input type="file" id="arquivoMidia" style="visibility: hidden;">
           </div>
         </div>
 
-        <table id="tabelaMidias" class="w-100">
-          <thead>
-            <th>Consultora</th>
-            <th>midia 1</th>
-            <th>midia 2</th>
-            <th>midia 3</th>
-            <th></th>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div id="divTabelaMidias" style="overflow-y: auto;height: 300px;">
+          <table id="tabelaMidias" class="w-100">
+            <tbody></tbody>
+          </table>
+        </div>  
 
       </div>
     </div>
@@ -354,10 +352,9 @@
 
     function jogar(id) {
 
-      var arrayMidias = JSON.parse(localStorage[id]);
-      $('#recebeFoto1').attr('src',arrayMidias[0]);
-      $('#recebeFoto2').attr('src',arrayMidias[1]);
-      $('#recebeFoto3').attr('src',arrayMidias[2]);
+      $('#recebeFoto1').attr('src', localStorage[id+'_1']);
+      $('#recebeFoto2').attr('src', localStorage[id+'_2']);
+      $('#recebeFoto3').attr('src', localStorage[id+'_3']);
       $('#telaCadastro').hide();
       $('#segundaTela').show();
 
@@ -394,46 +391,108 @@
 
     function salvaMidia(str_imagem) {
       
-      arrayMidias.push(str_imagem);
-
-      // if (arrayMidias.length <= 2) {
-
-        localStorage[$('#selectConsultorasCadastro :selected').val()] = JSON.stringify(arrayMidias);
-        preencheTabela();
-        
-        
-      // }
+      localStorage[idpessoaSelecionado+'_'+posicaoSelecionado] = str_imagem;
+      preencheTabela();
     }
+
+    $('#txtPesquisar').keypress(function(e) {
+      if (event.keyCode == 13) {
+        preencheTabela();
+      }
+    });
 
     function preencheTabela() {
       var linhas = '';
       for (var i in arrayPessoas) {
 
+        var totalUploads = 0;
         var e = arrayPessoas[i];
-        
-        if (( encontraSalvo(e.idpessoa) === true )&&(e.idempresa == dados.idempresa)) {
+        //( encontraSalvo(e.idpessoa) === true )&&
+
+        var boolPesquisar = e.nome.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf( $('#txtPesquisar').val().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "") );
+
+        if ((e.idempresa == dados.idempresa)&&(boolPesquisar >= 0)) {
 
           linhas += '<tr>';
             linhas += '<td>';
               linhas += e.nome;
             linhas += '</td>';
 
-            var arrayFotos = JSON.parse(localStorage[e.idpessoa]);
-            for (var i in arrayFotos) {
-              var string = arrayFotos[i];
-              
-              linhas += '<td>';
-                linhas += '<img src="'+string+'" width="40">';
-              linhas += '</td>';
+            linhas += '<td>';
+              linhas += '<div onclick="sobeFoto('+e.idpessoa+', 1)" style="border: 1px solid;display: flex;align-items: center;border-radius: 10px;padding-left: 15px;padding-right: 15px;user-select: none;cursor: pointer;">';
+                linhas += '<div align="center" style="flex: 1;">';
+                  
+                  if (typeof localStorage[e.idpessoa+'_1'] == 'undefined') {
+
+                    linhas += '<img src="img/mais.svg" />';
+                    linhas += '<div align="center" style="flex: 1;margin:0;">ADICIONAR</div>';
+
+                  } else {
+                    totalUploads++;
+                    linhas += '<img src="'+localStorage[e.idpessoa+'_1']+'" width="40px" />';
+                  }  
+                
+                linhas += '</div>';
+              linhas += '</div>';
+            linhas += '</td>';
+            linhas += '<td>';
+              linhas += '<div onclick="sobeFoto('+e.idpessoa+', 2)" style="border: 1px solid;display: flex;align-items: center;border-radius: 10px;padding-left: 15px;padding-right: 15px;user-select: none;cursor: pointer;">';
+                linhas += '<div align="center" style="flex: 1;">';
+                  
+                  if (typeof localStorage[e.idpessoa+'_2'] == 'undefined') {
+
+                    linhas += '<img src="img/mais.svg" />';
+                    linhas += '<div align="center" style="flex: 1;margin:0;">ADICIONAR</div>';
+
+                  } else {
+                    totalUploads++;
+                    linhas += '<img src="'+localStorage[e.idpessoa+'_2']+'" width="40px" />';
+                  }
+
+                linhas += '</div>';
+              linhas += '</div>';
+            linhas += '</td>';
+            linhas += '<td>';
+              linhas += '<div onclick="sobeFoto('+e.idpessoa+', 3)" style="border: 1px solid;display: flex;align-items: center;border-radius: 10px;padding-left: 15px;padding-right: 15px;user-select: none;cursor: pointer;">';
+                linhas += '<div align="center" style="flex: 1;">';
+                  
+                  if (typeof localStorage[e.idpessoa+'_3'] == 'undefined') {
+
+                    linhas += '<img src="img/mais.svg" />';
+                    linhas += '<div align="center" style="flex: 1;margin:0;">ADICIONAR</div>';
+
+                  } else {
+                    totalUploads++;
+                    linhas += '<img src="'+localStorage[e.idpessoa+'_3']+'" width="40px" />';
+                  }
+
+                linhas += '</div>';
+              linhas += '</div>';
+            linhas += '</td>';
+            if (totalUploads == 3) {
+
+              linhas += '<td><button onclick="jogar('+e.idpessoa+');" class="btn primary">jogar!</button></td>';
+            } else {
+              linhas += '<td></td>';
             }
 
-          if (arrayFotos.length == 3) {
+            // var arrayFotos = JSON.parse(localStorage[e.idpessoa]);
+            // for (var i in arrayFotos) {
+            //   var string = arrayFotos[i];
+              
+            //   linhas += '<td>';
+            //     linhas += '<img src="'+string+'" width="40">';
+            //   linhas += '</td>';
+            // }
+              // linhas += '<td></td><td></td><td></td><td></td>';
 
-            linhas += '<td><button onclick="jogar('+e.idpessoa+');" class="btn primary">jogar!</button></td>';
-          } else {
+          // if (arrayFotos.length == 3) {
 
-            linhas += '<td></td>';
-          }  
+          //   linhas += '<td><button onclick="jogar('+e.idpessoa+');" class="btn primary">jogar!</button></td>';
+          // } else {
+
+          //   linhas += '<td></td>';
+          // }  
           
           linhas += '</tr>';
         }
@@ -441,6 +500,8 @@
 
       $('#tabelaMidias tbody').html(linhas);
       $('#arquivoMidia').val('');
+
+      $("#divTabelaMidias").animate({ scrollTop: 0 }, "fast");
     }
 
     function numeroRandomico(maximum, minimum) {
@@ -589,6 +650,7 @@
 
     });
 
+    var idpessoaSelecionado, posicaoSelecionado;
     $('#arquivoMidia').change(function() {
       
       var $i = $( '#arquivoMidia' ), // Put file input ID here
@@ -598,12 +660,7 @@
         fr = new FileReader(); // FileReader instance
         fr.onload = function () {
           
-          if ($('#selectConsultorasCadastro').val().length > 0) {
-
-            salvaMidia(fr.result);
-          } else {
-            alert('selecione a consultora');
-          }
+          salvaMidia(fr.result);
 
         };
         //fr.readAsText( file );
@@ -613,6 +670,14 @@
       }
 
     });
+
+    function sobeFoto(idpessoa, posicao) {
+      // console.log({idpessoa,posicao});
+
+      idpessoaSelecionado = idpessoa;
+      posicaoSelecionado = posicao;
+      $('#arquivoMidia').click();
+    }
 
   </script>
 </body>
