@@ -338,6 +338,7 @@
 
   <script src="js/jquery.js"></script>
   <script src="js/RecordRTC.js"></script>
+  <script src="js/jszip.min.js"></script>
   <script src="js/swiper.min.js"></script>
   <script src="js/adapter-latest.js"></script>
   <script src="js/dados.js"></script>
@@ -352,6 +353,7 @@
 
     function jogar(id) {
 
+      idpessoaSelecionado = id;
       $('#recebeFoto1').attr('src', localStorage[id+'_1']);
       $('#recebeFoto2').attr('src', localStorage[id+'_2']);
       $('#recebeFoto3').attr('src', localStorage[id+'_3']);
@@ -365,7 +367,8 @@
         video.play();
 
         recorder = RecordRTC(camera, {
-            type: 'video'
+            type: 'video',
+            mimeType: 'audio/wav'
         });
 
         recorder.startRecording();
@@ -469,30 +472,24 @@
                 linhas += '</div>';
               linhas += '</div>';
             linhas += '</td>';
+            
+            if (typeof localStorage['video_'+e.idpessoa] != 'undefined') {
+
+              linhas += '<td><video src="data:video/webm;base64,'+localStorage['video_'+e.idpessoa]+'" style="display:inherit;position: inherit;" controls="true"></video></td>';
+            } else {
+
+              linhas += '<td></td>';
+            }
+            
             if (totalUploads == 3) {
 
-              linhas += '<td><button onclick="jogar('+e.idpessoa+');" class="btn primary">jogar!</button></td>';
+              linhas += '<td>';
+
+              linhas += '<button onclick="jogar('+e.idpessoa+');" class="btn primary">jogar!</button></td>';
             } else {
               linhas += '<td></td>';
             }
 
-            // var arrayFotos = JSON.parse(localStorage[e.idpessoa]);
-            // for (var i in arrayFotos) {
-            //   var string = arrayFotos[i];
-              
-            //   linhas += '<td>';
-            //     linhas += '<img src="'+string+'" width="40">';
-            //   linhas += '</td>';
-            // }
-              // linhas += '<td></td><td></td><td></td><td></td>';
-
-          // if (arrayFotos.length == 3) {
-
-          //   linhas += '<td><button onclick="jogar('+e.idpessoa+');" class="btn primary">jogar!</button></td>';
-          // } else {
-
-          //   linhas += '<td></td>';
-          // }  
           
           linhas += '</tr>';
         }
@@ -548,13 +545,30 @@
       });
     }
 
+    var blobToBase64 = function(blob, cb) {
+      var reader = new FileReader();
+      reader.onload = function() {
+      var dataUrl = reader.result;
+      var base64 = dataUrl.split(',')[1];
+      cb(base64);
+      };
+      reader.readAsDataURL(blob);
+    };
+
     function stopRecordingCallback() {
       video.src = video.srcObject = null;
       video.src = URL.createObjectURL(recorder.getBlob());
       video.play();
       recorder.camera.stop();
-      recorder.destroy();
-      recorder = null;
+      
+      var _blob = recorder.getBlob();
+
+      blobToBase64(_blob,function(b) {
+        localStorage['video_'+idpessoaSelecionado] = b;
+      });
+
+      // recorder.destroy();
+      // recorder = null;
     }
 
     var recorder; // globally accessible

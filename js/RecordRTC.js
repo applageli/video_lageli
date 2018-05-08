@@ -153,7 +153,7 @@ function RecordRTC(mediaStream, config) {
             });
 
             var blob = mediaRecorder.blob;
-
+            // console.log(mediaRecorder);
             if (!blob) {
                 if (__blob) {
                     mediaRecorder.blob = blob = __blob;
