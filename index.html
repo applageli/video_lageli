@@ -359,17 +359,21 @@
     var boolPlay = false;
     var musica = document.getElementById("musica"); 
     var selecionou = document.getElementById("selecionou"); 
+    var boolCadastro = false;
 
     function jogar(id) {
 
       idpessoaSelecionado = id;
+      contaX = 0;
 
-        $('#recebeFoto1').attr('src', retornaMidias(id, 1));
-        $('#recebeFoto2').attr('src', retornaMidias(id, 2));
-        $('#recebeFoto3').attr('src', retornaMidias(id, 3));
-
+      $('#recebeFoto1').attr('src', retornaMidias(id, 1));
+      $('#recebeFoto2').attr('src', retornaMidias(id, 2));
+      $('#recebeFoto3').attr('src', retornaMidias(id, 3));
       $('#telaCadastro').hide();
       $('#segundaTela').show();
+      $('#div_jogo').show();
+      $('#div_fotos').hide();
+      $('.quadradoClicavel').html('');
 
       boolPlay = true;
       this.disabled = true;
@@ -392,16 +396,6 @@
     }
 
     var arrayMidias = [];
-    
-    function encontraSalvo(idpessoa) {
-      var retorno = false;
-
-      if (typeof localStorage[idpessoa] != 'undefined') {
-        retorno = true;
-      }
-
-      return retorno;
-    }
 
     function salvaMidia(str_imagem) {
       
@@ -409,22 +403,42 @@
 
         var auxArrayDados = JSON.parse(value);
 
-        //to-do verificar se a midia já foi cadastrada anteriormente
         var objAuxArrayDados = {};
         objAuxArrayDados[idpessoaSelecionado+'_'+posicaoSelecionado] = str_imagem;
 
         if (auxArrayDados === null) {
           auxArrayDados = [];
         }
+
         auxArrayDados.push(objAuxArrayDados);
-        ldb.set('arrayDados', JSON.stringify(auxArrayDados));
-        dados.arrayDados = auxArrayDados;
+        
+        if (typeof retornaMidias(idpessoaSelecionado, posicaoSelecionado) == 'undefined') {
+
+          ldb.set('arrayDados', JSON.stringify(auxArrayDados));
+          dados.arrayDados = auxArrayDados;
+        } else {
+
+          var arrayDados = dados.arrayDados;
+          for (var i in arrayDados) {
+            var e = arrayDados[i];
+
+            if (typeof e[idpessoaSelecionado+'_'+posicaoSelecionado] != 'undefined') {
+              e[idpessoaSelecionado+'_'+posicaoSelecionado] = str_imagem;
+            }
+          }
+
+          ldb.set('arrayDados', JSON.stringify(arrayDados));
+          dados.arrayDados = arrayDados;
+        }
+        
+        boolCadastro = true;
         preencheTabela();
       });
     }
 
     $('#txtPesquisar').keypress(function(e) {
       if (event.keyCode == 13) {
+        boolCadastro = false;
         preencheTabela();
       }
     });
@@ -538,37 +552,12 @@
       $('#tabelaMidias tbody').html(linhas);
       $('#arquivoMidia').val('');
 
-      $("#divTabelaMidias").animate({ scrollTop: 0 }, "fast");
+      if (boolCadastro === false) {
 
-      for (var i in arrayPessoas) {
-        var r = arrayPessoas[i];
-
-        var element1 = $('#img_'+r.idpessoa+'_1');
-        ldb.get(r.idpessoa+'_1', function(value){
-          
-          if (value != null) {
-            element1.attr('src', value);
-          } else {
-
-          }
-        });
-
-        ldb.get(r.idpessoa+'_2',function(value){
-          if (value != null) {
-            $('#img_'+r.idpessoa+'_2').attr('src', value);
-          } else {
-
-          }
-        });
-
-        ldb.get(r.idpessoa+'_3',function(value){
-          if (value != null) {
-            $('#img_'+r.idpessoa+'_3').attr('src', value);
-          } else {
-
-          }
-        });
+        $("#divTabelaMidias").animate({ scrollTop: 0 }, "fast");
       }
+
+      boolCadastro = false;
     }
 
     function numeroRandomico(maximum, minimum) {
@@ -648,7 +637,6 @@
 
           var auxArrayDados = JSON.parse(value);
 
-          //to-do verificar se a midia já foi cadastrada anteriormente
           var objAuxArrayDados = {};
           objAuxArrayDados[idpessoaSelecionado+'_4'] = b;
 
@@ -656,8 +644,25 @@
             auxArrayDados = [];
           }
           auxArrayDados.push(objAuxArrayDados);
-          ldb.set('arrayDados', JSON.stringify(auxArrayDados));
-          dados.arrayDados = auxArrayDados;
+          
+          if (typeof retornaMidias(idpessoaSelecionado, 4) == 'undefined') {
+
+            ldb.set('arrayDados', JSON.stringify(auxArrayDados));
+            dados.arrayDados = auxArrayDados;
+          } else {
+
+            var arrayDados = dados.arrayDados;
+            for (var i in arrayDados) {
+              var e = arrayDados[i];
+
+              if (typeof e[idpessoaSelecionado+'_4'] != 'undefined') {
+                e[idpessoaSelecionado+'_4'] = b;
+              }
+            }
+            ldb.set('arrayDados', JSON.stringify(arrayDados));
+            dados.arrayDados = arrayDados;
+          }
+
           preencheTabela();
         });
 
@@ -681,6 +686,7 @@
       $('#div_fotos').hide();
       $('#segundaTela').hide();
       musica.pause();
+      boolCadastro = true;
     };
 
     var contaX = 0;
