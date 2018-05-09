@@ -9,22 +9,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 </head>
 <body>
-  <div class="c">
-    <div align="right" class="row">
-      <div class="1 col"></div>
-      <div class="11 col">
-        <span id="escondeisso" style="font-family:Product Sans;display: none ">Bem vindo! <span id="botaoSairNome"></span>, </span> <a id="botaoSair" href="javascript: delete localStorage.dados;location.reload()" style="display: none;">sair</a>
+  
+  <div class="c" style="position: fixed;width: 100%;background: #0e0c0d;top: 0px;left: 0px;margin: 0;padding: 0;max-width: 100%;box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);">
+
+    <div class="row" style="margin: 0;padding: 0;">
+      <div class="6 col" style="margin: 0;padding: 0;">
+        <img src="img/logo.png" width="150" />
+      </div>
+      <div align="right" class="6 col" style="margin: 0;padding: 0;display: table-cell; vertical-align: middle;">
+        <span id="escondeisso" style="font-family:Product Sans;display: none;color:#f1f1f0;">Bem vindo! <span id="botaoSairNome"></span>, </span> <a id="botaoSair" href="javascript: delete localStorage.dados;location.reload()" style="display: none;">sair</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button onclick="exportar()" class="btn primary">download .zip</button>
       </div>
     </div>
-  </div>
+
+  </div>  
   
   <div id="telaLogin" class="c">
-
-    <div align="center" class="row">
-      <div class="12 col">
-        <img src="img/logo.png" width="200" />
-      </div>
-    </div>
 
     <div align="left" class="row">
       <div align="left" class="5 col"></div>
@@ -53,73 +53,40 @@
   </div>
 
   <div id="telaCadastro" class="c" style="display: none; margin: 0">
-    
-    <div align="center" class="row">
-      <div class="12 col">
-        <img src="img/logo.png" width="200" />
-      </div>
-    </div>  
 
-
-    <div class="row" style="background: #f1f1f0;color: #000;">
-      <div class="12 col">
-        <div class="row" style="background: #f1f1f0;color: #000;">
-          <div class="11 col"></div>
-          <div class="1 col">
-            <button onclick="exportar()" class="btn primary">exportar</button>
-          </div>
-        </div>
+    <!-- <div class="row" style="background: #f1f1f0;color: #000;">
+      <div class="12 col"> -->
+        <br><br>
         <h2>Cadastro</h2>
         <p>Cadastre as fotos ou videos que aparecerão no jogo para cada uma de suas consultoras.</p>
-                
+                <!-- 
         <div class="row">
-          <!-- dasdsadasd -->
-          <div class="12 col">   
+          dasdsadasd
+          <div class="12 col">    -->
             <!-- <select id="selectConsultorasCadastro" style="font-family: Product Sans"></select> -->
             <input type="search" autocomplete="off" autocorrect="off" autocapitalize="off" class="w-100" placeholder="pesquisar pelo nome da consultora" id="txtPesquisar" style="font-family: Product Sans" />
             <p style="position: relative;
     bottom: 18px;
     font-size: 14px;
-    COLOR: darkgray;">pressione enter para pesquisar</p>
+    COLOR: darkgray;z-index: -1">pressione enter para pesquisar</p>
             <input type="file" id="arquivoMidia" style="visibility: hidden;">
-          </div>
-        </div>
+          <!-- </div>
+        </div> -->
 
-        <div id="divTabelaMidias" style="    overflow-y: auto;    height: 250px;">
+        <div id="divTabelaMidias" style="overflow-y: auto;height: 330px;background: white;">
           <table id="tabelaMidias" class="w-100">
             <tbody></tbody>
           </table>
         </div>  
 
-      </div>
-    </div>
-
-  </div>
-
-  <div id="primeiraTela" class="c" style="display: none">
-
-    <div align="center" class="row">
-      <div class="12 col">
-        <img src="img/logo.png" width="200" />
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="12 col">
-        <H3>Selecione a consultora:</H3>
-        <select id="selectConsultoras" style="font-family: Product Sans"></select>
-      </div>
-    </div>
+     <!--  </div>
+    </div> -->
 
   </div>
 
   <div id="segundaTela" class="c" style="display: none;">
     
-    <div align="center" class="row">
-      <div class="12 col">
-        <img src="img/logo.png" width="200" />
-      </div>
-    </div>
+    <br><br>
     
     <div class="row">
       <div class="12 col">
@@ -144,7 +111,7 @@
     <div id="div_jogo" align="center" class="row">
       <div id="div_jogo_inner" class="12 col">
         
-        <div class="row" style="border-spacing: 0;margin: 0;background: #0e0c0d">
+        <div class="row" style="border-spacing: 0;margin: 0;background: #f1f1f0">
           <div align="center" class="1 col"></div>
           <div align="center" class="1 col" style="width: 24px;height: 20px;">A</div>
           <div align="center" class="1 col" style="width: 24px;height: 20px;">B</div>
@@ -160,7 +127,7 @@
         </div>
 
         <div class="row" style="border-spacing: 0;margin: 0;">
-          <div align="center" class="1 col" style="height: 20px;background: #0e0c0d">1</div>
+          <div align="center" class="1 col" style="height: 20px;background: #f1f1f0">1</div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
@@ -171,11 +138,11 @@
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
-          <div align="center" class="1 col" style="background: #0e0c0d"></div>
+          <div align="center" class="1 col" style="background: #f1f1f0"></div>
         </div>
 
         <div class="row" style="border-spacing: 0;margin: 0;">
-          <div align="center" class="1 col" style="height: 20px;background: #0e0c0d">2</div>
+          <div align="center" class="1 col" style="height: 20px;background: #f1f1f0">2</div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
@@ -186,11 +153,11 @@
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
-          <div align="center" class="1 col" style="background: #0e0c0d"></div>
+          <div align="center" class="1 col" style="background: #f1f1f0"></div>
         </div>
 
         <div class="row" style="border-spacing: 0;margin: 0;">
-          <div align="center" class="1 col" style="height: 20px;background: #0e0c0d">3</div>
+          <div align="center" class="1 col" style="height: 20px;background: #f1f1f0">3</div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
@@ -201,11 +168,11 @@
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
-          <div align="center" class="1 col" style="background: #0e0c0d"></div>
+          <div align="center" class="1 col" style="background: #f1f1f0"></div>
         </div>
 
         <div class="row" style="border-spacing: 0;margin: 0;">
-          <div align="center" class="1 col" style="height: 20px;background: #0e0c0d">4</div>
+          <div align="center" class="1 col" style="height: 20px;background: #f1f1f0">4</div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
@@ -216,11 +183,11 @@
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
-          <div align="center" class="1 col" style="background: #0e0c0d"></div>
+          <div align="center" class="1 col" style="background: #f1f1f0"></div>
         </div>
 
         <div class="row" style="border-spacing: 0;margin: 0;">
-          <div align="center" class="1 col" style="height: 20px;background: #0e0c0d">5</div>
+          <div align="center" class="1 col" style="height: 20px;background: #f1f1f0">5</div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
@@ -231,11 +198,11 @@
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
-          <div align="center" class="1 col" style="background: #0e0c0d"></div>
+          <div align="center" class="1 col" style="background: #f1f1f0"></div>
         </div>
 
         <div class="row" style="border-spacing: 0;margin: 0;">
-          <div align="center" class="1 col" style="height: 20px;background: #0e0c0d">6</div>
+          <div align="center" class="1 col" style="height: 20px;background: #f1f1f0">6</div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
@@ -246,11 +213,11 @@
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
-          <div align="center" class="1 col" style="background: #0e0c0d"></div>
+          <div align="center" class="1 col" style="background: #f1f1f0"></div>
         </div>
 
         <div class="row" style="border-spacing: 0;margin: 0;">
-          <div align="center" class="1 col" style="height: 20px;background: #0e0c0d">7</div>
+          <div align="center" class="1 col" style="height: 20px;background: #f1f1f0">7</div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
@@ -261,11 +228,11 @@
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
-          <div align="center" class="1 col" style="background: #0e0c0d"></div>
+          <div align="center" class="1 col" style="background: #f1f1f0"></div>
         </div>
 
         <div class="row" style="border-spacing: 0;margin: 0;">
-          <div align="center" class="1 col" style="height: 20px;background: #0e0c0d">8</div>
+          <div align="center" class="1 col" style="height: 20px;background: #f1f1f0">8</div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
@@ -276,11 +243,11 @@
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
-          <div align="center" class="1 col" style="background: #0e0c0d"></div>
+          <div align="center" class="1 col" style="background: #f1f1f0"></div>
         </div>
 
         <div class="row" style="border-spacing: 0;margin: 0;">
-          <div align="center" class="1 col" style="height: 20px;background: #0e0c0d">9</div>
+          <div align="center" class="1 col" style="height: 20px;background: #f1f1f0">9</div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
@@ -291,11 +258,11 @@
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
-          <div align="center" class="1 col" style="background: #0e0c0d"></div>
+          <div align="center" class="1 col" style="background: #f1f1f0"></div>
         </div>
 
         <div class="row" style="border-spacing: 0;margin: 0;">
-          <div align="center" class="1 col" style="height: 20px;background: #0e0c0d">10 </div>
+          <div align="center" class="1 col" style="height: 20px;background: #f1f1f0">10 </div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
@@ -306,7 +273,7 @@
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
           <div align="center" class="1 col quadradoClicavel" style="width: 24px;height: 48px;border:1px solid #971717;"></div>
-          <div align="center" class="1 col" style="background: #0e0c0d"></div>
+          <div align="center" class="1 col" style="background: #f1f1f0"></div>
         </div>
 
       </div>
@@ -429,7 +396,7 @@
         var auxArrayDados = JSON.parse(value);
 
         var objAuxArrayDados = {};
-        objAuxArrayDados[idpessoaSelecionado+'_'+posicaoSelecionado] = str_imagem;
+        objAuxArrayDados[dados.idempresa+'_'+idpessoaSelecionado+'_'+posicaoSelecionado] = str_imagem;
 
         if (auxArrayDados === null) {
           auxArrayDados = [];
@@ -447,8 +414,8 @@
           for (var i in arrayDados) {
             var e = arrayDados[i];
 
-            if (typeof e[idpessoaSelecionado+'_'+posicaoSelecionado] != 'undefined') {
-              e[idpessoaSelecionado+'_'+posicaoSelecionado] = str_imagem;
+            if (typeof e[dados.idempresa+'_'+idpessoaSelecionado+'_'+posicaoSelecionado] != 'undefined') {
+              e[dados.idempresa+'_'+idpessoaSelecionado+'_'+posicaoSelecionado] = str_imagem;
             }
           }
 
@@ -475,8 +442,8 @@
       for (var x in arrayDados) {
         var t = arrayDados[x];
 
-        if (typeof t[idpessoa+'_'+posicao] != 'undefined') {
-          src = t[idpessoa+'_'+posicao];
+        if (typeof t[dados.idempresa+'_'+idpessoa+'_'+posicao] != 'undefined') {
+          src = t[dados.idempresa+'_'+idpessoa+'_'+posicao];
         }
       }
 
@@ -516,10 +483,10 @@
 
                     if ((tipoMidia == 'jpg')||(tipoMidia == 'jpeg')||(tipoMidia == 'png')||(tipoMidia == 'gif')) {
 
-                      linhas += '<img src="'+retornaMidias(e.idpessoa, 1)+'" width="40px" />';
+                      linhas += '<img src="'+retornaMidias(e.idpessoa, 1)+'" height="60px" />';
                     } else {
 
-                      linhas += '<video src="'+retornaMidias(e.idpessoa, 1)+'" style="display:inherit;position: inherit;" autoplay muted loop></video>';
+                      linhas += '<video src="'+retornaMidias(e.idpessoa, 1)+'" style="display:inherit;position: inherit;height:60px;width: inherit;" autoplay muted loop></video>';
                     }
                   }
                 
@@ -542,10 +509,10 @@
 
                     if ((tipoMidia == 'jpg')||(tipoMidia == 'jpeg')||(tipoMidia == 'png')||(tipoMidia == 'gif')) {
 
-                      linhas += '<img src="'+retornaMidias(e.idpessoa, 2)+'" width="40px" />';
+                      linhas += '<img src="'+retornaMidias(e.idpessoa, 2)+'" height="60px" />';
                     } else {
 
-                      linhas += '<video src="'+retornaMidias(e.idpessoa, 2)+'" style="display:inherit;position: inherit;" autoplay muted loop></video>';
+                      linhas += '<video src="'+retornaMidias(e.idpessoa, 2)+'" style="display:inherit;position: inherit;height:60px;width: inherit;" autoplay muted loop></video>';
                     }
                   }
                   
@@ -568,10 +535,10 @@
 
                     if ((tipoMidia == 'jpg')||(tipoMidia == 'jpeg')||(tipoMidia == 'png')||(tipoMidia == 'gif')) {
 
-                      linhas += '<img src="'+retornaMidias(e.idpessoa, 3)+'" width="40px" />';
+                      linhas += '<img src="'+retornaMidias(e.idpessoa, 3)+'" height="60px" />';
                     } else {
 
-                      linhas += '<video src="'+retornaMidias(e.idpessoa, 3)+'" style="display:inherit;position: inherit;" autoplay muted loop></video>';
+                      linhas += '<video src="'+retornaMidias(e.idpessoa, 3)+'" style="width: inherit;height:60px;display:inherit;position: inherit;" autoplay muted loop></video>';
                     }
                   } 
 
@@ -584,7 +551,7 @@
               linhas += '<td></td>';
 
             } else {
-              linhas += '<td><video src="data:video/webm;base64,'+retornaMidias(e.idpessoa, 4)+'" style="display:inherit;position: inherit;" controls="true"></video></td>';
+              linhas += '<td><video src="data:video/webm;base64,'+retornaMidias(e.idpessoa, 4)+'" style="width: inherit;display:inherit;position: inherit;height:60px;" autoplay muted loop></video></td>';
             }
             
             if (totalUploads == 3) {
@@ -624,7 +591,10 @@
         $('#telaLogin').hide();
         $('#telaCadastro').show();
         $('#botaoSair').show();
-        $('#escondeisso').show();
+        if ($(window).width() >= 600) {
+
+          $('#escondeisso').show();
+        }
         $('#botaoSairNome').html(dados.usuario);
 
         var linhas = '';
@@ -690,7 +660,7 @@
           var auxArrayDados = JSON.parse(value);
 
           var objAuxArrayDados = {};
-          objAuxArrayDados[idpessoaSelecionado+'_4'] = b;
+          objAuxArrayDados[dados.idempresa+'_'+idpessoaSelecionado+'_4'] = b;
 
           if (auxArrayDados === null) {
             auxArrayDados = [];
@@ -707,8 +677,8 @@
             for (var i in arrayDados) {
               var e = arrayDados[i];
 
-              if (typeof e[idpessoaSelecionado+'_4'] != 'undefined') {
-                e[idpessoaSelecionado+'_4'] = b;
+              if (typeof e[dados.idempresa+'_'+idpessoaSelecionado+'_4'] != 'undefined') {
+                e[dados.idempresa+'_'+idpessoaSelecionado+'_4'] = b;
               }
             }
             ldb.set('arrayDados', JSON.stringify(arrayDados));
