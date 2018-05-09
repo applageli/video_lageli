@@ -52,7 +52,7 @@
 
   </div>
 
-  <div id="telaCadastro" class="c" style="display: none">
+  <div id="telaCadastro" class="c" style="display: none; margin: 0">
     
     <div align="center" class="row">
       <div class="12 col">
@@ -84,7 +84,7 @@
           </div>
         </div>
 
-        <div id="divTabelaMidias" style="overflow-y: auto;height: 300px;">
+        <div id="divTabelaMidias" style="    overflow-y: auto;    height: 250px;">
           <table id="tabelaMidias" class="w-100">
             <tbody></tbody>
           </table>
@@ -312,21 +312,7 @@
     </div>
 
     <div id="div_fotos" class="swiper-container" style="display: none;">
-      <div class="swiper-wrapper">
-        
-        <div class="swiper-slide">
-          <img id="recebeFoto1" width="200" />          
-        </div>
-
-        <div class="swiper-slide">
-          <img id="recebeFoto2" width="200" />          
-        </div>
-
-        <div class="swiper-slide">
-          <img id="recebeFoto3" width="200" />          
-        </div>
-
-      </div>
+      <div class="swiper-wrapper"></div>
     </div>
 
   </div>
@@ -366,9 +352,47 @@
       idpessoaSelecionado = id;
       contaX = 0;
 
-      $('#recebeFoto1').attr('src', retornaMidias(id, 1));
-      $('#recebeFoto2').attr('src', retornaMidias(id, 2));
-      $('#recebeFoto3').attr('src', retornaMidias(id, 3));
+      var linhas = '';
+
+      linhas += '<div class="swiper-slide">';
+      var tipoMidia1 = retornaMidias(id, 1).split(';')[0].split('/')[1];
+
+      if ((tipoMidia1 == 'jpg')||(tipoMidia1 == 'jpeg')||(tipoMidia1 == 'png')||(tipoMidia1 == 'gif')) {
+
+        linhas += '<img src="'+retornaMidias(id, 1)+'" width="200" />';
+      } else {
+
+        linhas += '<video src="'+retornaMidias(id, 1)+'" style="display:inherit;position: inherit;" muted autoplay loop></video>';
+      }
+      linhas += '</div>';
+
+      linhas += '<div class="swiper-slide">';
+      var tipoMidia2 = retornaMidias(id, 2).split(';')[0].split('/')[1];
+
+      if ((tipoMidia2 == 'jpg')||(tipoMidia2 == 'jpeg')||(tipoMidia2 == 'png')||(tipoMidia2 == 'gif')) {
+
+        linhas += '<img src="'+retornaMidias(id, 2)+'" width="200" />';
+      } else {
+
+        linhas += '<video src="'+retornaMidias(id, 2)+'" style="display:inherit;position: inherit;" muted autoplay loop></video>';
+      }
+      linhas += '</div>';
+
+      linhas += '<div class="swiper-slide">';
+      var tipoMidia3 = retornaMidias(id, 3).split(';')[0].split('/')[1];
+
+      if ((tipoMidia3 == 'jpg')||(tipoMidia3 == 'jpeg')||(tipoMidia3 == 'png')||(tipoMidia3 == 'gif')) {
+
+        linhas += '<img src="'+retornaMidias(id, 3)+'" width="200" />';
+      } else {
+
+        linhas += '<video src="'+retornaMidias(id, 3)+'" style="display:inherit;position: inherit;" muted autoplay loop></video>';
+      }
+      linhas += '</div>';
+
+
+      $('#div_fotos').find('div').html(linhas);
+
       $('#telaCadastro').hide();
       $('#segundaTela').show();
       $('#div_jogo').show();
@@ -398,7 +422,7 @@
     var arrayMidias = [];
 
     function salvaMidia(str_imagem) {
-      
+
       ldb.get('arrayDados', function(value) {
 
         var auxArrayDados = JSON.parse(value);
@@ -486,7 +510,16 @@
 
                   } else {
                     totalUploads++;
-                    linhas += '<img src="'+retornaMidias(e.idpessoa, 1)+'" width="40px" />';
+
+                    var tipoMidia = retornaMidias(e.idpessoa, 1).split(';')[0].split('/')[1];
+
+                    if ((tipoMidia == 'jpg')||(tipoMidia == 'jpeg')||(tipoMidia == 'png')||(tipoMidia == 'gif')) {
+
+                      linhas += '<img src="'+retornaMidias(e.idpessoa, 1)+'" width="40px" />';
+                    } else {
+
+                      linhas += '<video src="'+retornaMidias(e.idpessoa, 1)+'" style="display:inherit;position: inherit;" autoplay muted loop></video>';
+                    }
                   }
                 
                 linhas += '</div>';
@@ -503,7 +536,16 @@
 
                   } else {
                     totalUploads++;
-                    linhas += '<img src="'+retornaMidias(e.idpessoa, 2)+'" width="40px" />';
+
+                    var tipoMidia = retornaMidias(e.idpessoa, 2).split(';')[0].split('/')[1];
+
+                    if ((tipoMidia == 'jpg')||(tipoMidia == 'jpeg')||(tipoMidia == 'png')||(tipoMidia == 'gif')) {
+
+                      linhas += '<img src="'+retornaMidias(e.idpessoa, 2)+'" width="40px" />';
+                    } else {
+
+                      linhas += '<video src="'+retornaMidias(e.idpessoa, 2)+'" style="display:inherit;position: inherit;" autoplay muted loop></video>';
+                    }
                   }
                   
                 linhas += '</div>';
@@ -520,7 +562,16 @@
 
                   } else {
                     totalUploads++;
-                    linhas += '<img src="'+retornaMidias(e.idpessoa, 3)+'" width="40px" />';
+
+                    var tipoMidia = retornaMidias(e.idpessoa, 3).split(';')[0].split('/')[1];
+
+                    if ((tipoMidia == 'jpg')||(tipoMidia == 'jpeg')||(tipoMidia == 'png')||(tipoMidia == 'gif')) {
+
+                      linhas += '<img src="'+retornaMidias(e.idpessoa, 3)+'" width="40px" />';
+                    } else {
+
+                      linhas += '<video src="'+retornaMidias(e.idpessoa, 3)+'" style="display:inherit;position: inherit;" autoplay muted loop></video>';
+                    }
                   } 
 
                 linhas += '</div>';
@@ -692,7 +743,7 @@
       $('#textoJogo').html('Para jogar clique em um quadrado do quadro abaixo e veja se encontra o <span style="color:#ff5b56;">❤</span> escondido!');
       $('#btn-stop-recording').hide();
       $('#recebeTotal').html('Tentativas: 0');
-
+      $('#div_fotos').find('div').html('');
     };
 
     var contaX = 0;
@@ -733,15 +784,19 @@
             selecionou.pause();
             selecionou.play();
             musica.play();
+            if (typeof mySwiper != 'undefined') {
+
+              mySwiper.destroy();
+            }
             mySwiper = new Swiper ('.swiper-container', {
-              spaceBetween: 30,
-              centeredSlides: true,
+              centeredSlides: true
+              ,
               autoplay: {
                 delay: 2500,
                 disableOnInteraction: false,
               },
               loop: true,
-              effect: 'flip' //fade, cube, coverflow, flip
+              // effect: 'flip' //fade, cube, coverflow, flip
             });
           },3600);
         }
@@ -841,9 +896,9 @@
 
           var img = zip.folder(nome);
           
-          img.file("foto1."+tipoFoto1, foto1,{base64: true});
-          img.file("foto2."+tipoFoto2, foto2,{base64: true});
-          img.file("foto3."+tipoFoto3, foto3,{base64: true});
+          img.file("midia1."+tipoFoto1, foto1,{base64: true});
+          img.file("midia2."+tipoFoto2, foto2,{base64: true});
+          img.file("midia3."+tipoFoto3, foto3,{base64: true});
           img.file("video.webm", video,{base64: true});
         }
       }
