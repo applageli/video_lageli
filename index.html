@@ -686,7 +686,13 @@
       $('#div_fotos').hide();
       $('#segundaTela').hide();
       musica.pause();
+      musica.currentTime = 0;
       boolCadastro = true;
+      $('#recebeTotal').show();
+      $('#textoJogo').html('Para jogar clique em um quadrado do quadro abaixo e veja se encontra o <span style="color:#ff5b56;">❤</span> escondido!');
+      $('#btn-stop-recording').hide();
+      $('#recebeTotal').html('Tentativas: 0');
+
     };
 
     var contaX = 0;
@@ -719,8 +725,8 @@
           setTimeout(function() {
 
             $('#div_jogo').hide();
-            $('#recebeTotal').hide();
             $('#div_fotos').show(); 
+            $('#recebeTotal').hide();
             $('#textoJogo').html('Você não econtrou o <span style="color:#ff5b56;">❤</span> Lageli, mas você já tinha ele!');
             $('#btn-start-recording').hide();
             $('#btn-stop-recording').show();
