@@ -60,8 +60,15 @@
       </div>
     </div>  
 
+
     <div class="row" style="background: #f1f1f0;color: #000;">
       <div class="12 col">
+        <div class="row" style="background: #f1f1f0;color: #000;">
+          <div class="11 col"></div>
+          <div class="1 col">
+            <button onclick="exportar()" class="btn primary">exportar</button>
+          </div>
+        </div>
         <h2>Cadastro</h2>
         <p>Cadastre as fotos que aparecerão no jogo para cada uma de suas consultoras.</p>
                 
@@ -337,7 +344,9 @@
   </audio>
 
   <script src="js/jquery.js"></script>
+  <script src="js/db.js"></script>
   <script src="js/RecordRTC.js"></script>
+  <script src="js/FileSaver.js"></script>
   <script src="js/jszip.min.js"></script>
   <script src="js/swiper.min.js"></script>
   <script src="js/adapter-latest.js"></script>
@@ -354,9 +363,11 @@
     function jogar(id) {
 
       idpessoaSelecionado = id;
-      $('#recebeFoto1').attr('src', localStorage[id+'_1']);
-      $('#recebeFoto2').attr('src', localStorage[id+'_2']);
-      $('#recebeFoto3').attr('src', localStorage[id+'_3']);
+
+        $('#recebeFoto1').attr('src', retornaMidias(id, 1));
+        $('#recebeFoto2').attr('src', retornaMidias(id, 2));
+        $('#recebeFoto3').attr('src', retornaMidias(id, 3));
+
       $('#telaCadastro').hide();
       $('#segundaTela').show();
 
@@ -394,8 +405,22 @@
 
     function salvaMidia(str_imagem) {
       
-      localStorage[idpessoaSelecionado+'_'+posicaoSelecionado] = str_imagem;
-      preencheTabela();
+      ldb.get('arrayDados', function(value) {
+
+        var auxArrayDados = JSON.parse(value);
+
+        //to-do verificar se a midia já foi cadastrada anteriormente
+        var objAuxArrayDados = {};
+        objAuxArrayDados[idpessoaSelecionado+'_'+posicaoSelecionado] = str_imagem;
+
+        if (auxArrayDados === null) {
+          auxArrayDados = [];
+        }
+        auxArrayDados.push(objAuxArrayDados);
+        ldb.set('arrayDados', JSON.stringify(auxArrayDados));
+        dados.arrayDados = auxArrayDados;
+        preencheTabela();
+      });
     }
 
     $('#txtPesquisar').keypress(function(e) {
@@ -404,13 +429,28 @@
       }
     });
 
+    function retornaMidias(idpessoa, posicao) {
+      
+      var arrayDados = dados.arrayDados, src;
+      
+      for (var x in arrayDados) {
+        var t = arrayDados[x];
+
+        if (typeof t[idpessoa+'_'+posicao] != 'undefined') {
+          src = t[idpessoa+'_'+posicao];
+        }
+      }
+
+      return src;
+    }
+
     function preencheTabela() {
       var linhas = '';
+
       for (var i in arrayPessoas) {
 
         var totalUploads = 0;
         var e = arrayPessoas[i];
-        //( encontraSalvo(e.idpessoa) === true )&&
 
         var boolPesquisar = e.nome.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf( $('#txtPesquisar').val().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "") );
 
@@ -425,15 +465,15 @@
               linhas += '<div onclick="sobeFoto('+e.idpessoa+', 1)" style="border: 1px solid;display: flex;align-items: center;border-radius: 10px;padding-left: 15px;padding-right: 15px;user-select: none;cursor: pointer;">';
                 linhas += '<div align="center" style="flex: 1;">';
                   
-                  if (typeof localStorage[e.idpessoa+'_1'] == 'undefined') {
+                  if (typeof retornaMidias(e.idpessoa, 1) == 'undefined') {
 
                     linhas += '<img src="img/mais.svg" />';
                     linhas += '<div align="center" style="flex: 1;margin:0;">ADICIONAR</div>';
 
                   } else {
                     totalUploads++;
-                    linhas += '<img src="'+localStorage[e.idpessoa+'_1']+'" width="40px" />';
-                  }  
+                    linhas += '<img src="'+retornaMidias(e.idpessoa, 1)+'" width="40px" />';
+                  }
                 
                 linhas += '</div>';
               linhas += '</div>';
@@ -442,16 +482,16 @@
               linhas += '<div onclick="sobeFoto('+e.idpessoa+', 2)" style="border: 1px solid;display: flex;align-items: center;border-radius: 10px;padding-left: 15px;padding-right: 15px;user-select: none;cursor: pointer;">';
                 linhas += '<div align="center" style="flex: 1;">';
                   
-                  if (typeof localStorage[e.idpessoa+'_2'] == 'undefined') {
+                  if (typeof retornaMidias(e.idpessoa, 2) == 'undefined') {
 
                     linhas += '<img src="img/mais.svg" />';
                     linhas += '<div align="center" style="flex: 1;margin:0;">ADICIONAR</div>';
 
                   } else {
                     totalUploads++;
-                    linhas += '<img src="'+localStorage[e.idpessoa+'_2']+'" width="40px" />';
+                    linhas += '<img src="'+retornaMidias(e.idpessoa, 2)+'" width="40px" />';
                   }
-
+                  
                 linhas += '</div>';
               linhas += '</div>';
             linhas += '</td>';
@@ -459,26 +499,26 @@
               linhas += '<div onclick="sobeFoto('+e.idpessoa+', 3)" style="border: 1px solid;display: flex;align-items: center;border-radius: 10px;padding-left: 15px;padding-right: 15px;user-select: none;cursor: pointer;">';
                 linhas += '<div align="center" style="flex: 1;">';
                   
-                  if (typeof localStorage[e.idpessoa+'_3'] == 'undefined') {
+                  if (typeof retornaMidias(e.idpessoa, 3) == 'undefined') {
 
                     linhas += '<img src="img/mais.svg" />';
                     linhas += '<div align="center" style="flex: 1;margin:0;">ADICIONAR</div>';
 
                   } else {
                     totalUploads++;
-                    linhas += '<img src="'+localStorage[e.idpessoa+'_3']+'" width="40px" />';
-                  }
+                    linhas += '<img src="'+retornaMidias(e.idpessoa, 3)+'" width="40px" />';
+                  } 
 
                 linhas += '</div>';
               linhas += '</div>';
             linhas += '</td>';
             
-            if (typeof localStorage['video_'+e.idpessoa] != 'undefined') {
-
-              linhas += '<td><video src="data:video/webm;base64,'+localStorage['video_'+e.idpessoa]+'" style="display:inherit;position: inherit;" controls="true"></video></td>';
-            } else {
+            if (typeof retornaMidias(e.idpessoa, 4) == 'undefined') {
 
               linhas += '<td></td>';
+
+            } else {
+              linhas += '<td><video src="data:video/webm;base64,'+retornaMidias(e.idpessoa, 4)+'" style="display:inherit;position: inherit;" controls="true"></video></td>';
             }
             
             if (totalUploads == 3) {
@@ -499,6 +539,36 @@
       $('#arquivoMidia').val('');
 
       $("#divTabelaMidias").animate({ scrollTop: 0 }, "fast");
+
+      for (var i in arrayPessoas) {
+        var r = arrayPessoas[i];
+
+        var element1 = $('#img_'+r.idpessoa+'_1');
+        ldb.get(r.idpessoa+'_1', function(value){
+          
+          if (value != null) {
+            element1.attr('src', value);
+          } else {
+
+          }
+        });
+
+        ldb.get(r.idpessoa+'_2',function(value){
+          if (value != null) {
+            $('#img_'+r.idpessoa+'_2').attr('src', value);
+          } else {
+
+          }
+        });
+
+        ldb.get(r.idpessoa+'_3',function(value){
+          if (value != null) {
+            $('#img_'+r.idpessoa+'_3').attr('src', value);
+          } else {
+
+          }
+        });
+      }
     }
 
     function numeroRandomico(maximum, minimum) {
@@ -516,7 +586,6 @@
         $('#escondeisso').show();
         $('#botaoSairNome').html(dados.usuario);
 
-
         var linhas = '';
 
         var arrayConsultoras = $.grep(arrayPessoas, function(e){ return e.idempresa == dados.idempresa });
@@ -530,7 +599,18 @@
 
         $('#selectConsultoras').html(linhas);
         $('#selectConsultorasCadastro').html(linhas);
-        preencheTabela();
+
+        ldb.get('arrayDados', function(value) {
+
+          var auxArrayDados = JSON.parse(value);
+
+          if (auxArrayDados === null) {
+            auxArrayDados = [];
+          }
+          
+          dados.arrayDados = auxArrayDados;
+          preencheTabela();
+        });
       }
     });
 
@@ -564,7 +644,23 @@
       var _blob = recorder.getBlob();
 
       blobToBase64(_blob,function(b) {
-        localStorage['video_'+idpessoaSelecionado] = b;
+        ldb.get('arrayDados', function(value) {
+
+          var auxArrayDados = JSON.parse(value);
+
+          //to-do verificar se a midia já foi cadastrada anteriormente
+          var objAuxArrayDados = {};
+          objAuxArrayDados[idpessoaSelecionado+'_4'] = b;
+
+          if (auxArrayDados === null) {
+            auxArrayDados = [];
+          }
+          auxArrayDados.push(objAuxArrayDados);
+          ldb.set('arrayDados', JSON.stringify(auxArrayDados));
+          dados.arrayDados = auxArrayDados;
+          preencheTabela();
+        });
+
       });
 
       // recorder.destroy();
@@ -575,11 +671,16 @@
 
     document.getElementById('btn-stop-recording').onclick = function() {
       
-      $('video').show();
-      $('#div_fotos').hide();
+      // $('video').show();
       boolPlay = false;
       this.disabled = true;
       recorder.stopRecording(stopRecordingCallback);
+
+      alert('jogo salvo!');
+      $('#telaCadastro').show();
+      $('#div_fotos').hide();
+      $('#segundaTela').hide();
+      musica.pause();
     };
 
     var contaX = 0;
@@ -691,6 +792,55 @@
       idpessoaSelecionado = idpessoa;
       posicaoSelecionado = posicao;
       $('#arquivoMidia').click();
+    }
+
+    function exportar() {
+      
+      var zip = new JSZip();
+      
+      for (var i in arrayPessoas) {
+        var e = arrayPessoas[i];
+        var idpessoa = e.idpessoa;
+        var nome = e.nome;
+        var foto1 = retornaMidias(idpessoa, 1);
+        if (typeof foto1 != 'undefined') {
+
+          var tipoFoto1 = foto1.split(';')[0].split('/')[1];
+          foto1 = foto1.split(',')[1];
+        }
+
+        var foto2 = retornaMidias(idpessoa, 2);
+        if (typeof foto2 != 'undefined') {
+
+          var tipoFoto2 = foto2.split(';')[0].split('/')[1];
+          foto2 = foto2.split(',')[1];
+        }
+
+        var foto3 = retornaMidias(idpessoa, 3);
+        if (typeof foto3 != 'undefined') {
+
+          var tipoFoto3 = foto3.split(';')[0].split('/')[1];
+          foto3 = foto3.split(',')[1];
+        }
+
+        var video = retornaMidias(idpessoa, 4);
+
+        if (typeof video != 'undefined') {
+
+          var img = zip.folder(nome);
+          
+          img.file("foto1."+tipoFoto1, foto1,{base64: true});
+          img.file("foto2."+tipoFoto2, foto2,{base64: true});
+          img.file("foto3."+tipoFoto3, foto3,{base64: true});
+          img.file("video.webm", video,{base64: true});
+        }
+      }
+
+      zip.generateAsync({type:"blob"})
+      .then(function(content) {
+        var hoje = new Date();
+        saveAs(content, dados.usuario+"_"+dados.idempresa+"_"+hoje.getTime()+".zip");
+      });
     }
 
   </script>
