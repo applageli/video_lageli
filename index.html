@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <link rel="SHORTCUT ICON" href="img/L2.png">
     <title>Encontre o amor Lageli</title>
     <link rel="stylesheet" type="text/css" href="css/lit.css">
     <link rel="stylesheet" type="text/css" href="css/swiper.min.css">
@@ -457,6 +458,7 @@
 
         var totalUploads = 0;
         var e = arrayPessoas[i];
+        var tipoMidiaAumentar = 1;
 
         var boolPesquisar = e.nome.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf( $('#txtPesquisar').val().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "") );
 
@@ -487,11 +489,19 @@
                     } else {
 
                       linhas += '<video src="'+retornaMidias(e.idpessoa, 1)+'" style="display:inherit;position: inherit;height:60px;width: inherit;" autoplay muted loop></video>';
+                      tipoMidiaAumentar = 2;
                     }
                   }
                 
                 linhas += '</div>';
               linhas += '</div>';
+                
+              if (typeof retornaMidias(e.idpessoa, 1) != 'undefined') {
+                linhas += '<a onclick="aumentar('+e.idpessoa+', 1, '+tipoMidiaAumentar+')" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUMENTAR</a>';
+              } else {
+                linhas += '<a></a>';
+              }  
+            
             linhas += '</td>';
             linhas += '<td>';
               linhas += '<div onclick="sobeFoto('+e.idpessoa+', 2)" style="border: 1px solid;display: flex;align-items: center;border-radius: 10px;padding-left: 15px;padding-right: 15px;user-select: none;cursor: pointer;">';
@@ -513,11 +523,19 @@
                     } else {
 
                       linhas += '<video src="'+retornaMidias(e.idpessoa, 2)+'" style="display:inherit;position: inherit;height:60px;width: inherit;" autoplay muted loop></video>';
+                      tipoMidiaAumentar = 2;
                     }
                   }
                   
                 linhas += '</div>';
               linhas += '</div>';
+
+              if (typeof retornaMidias(e.idpessoa, 2) != 'undefined') {
+                linhas += '<a onclick="aumentar('+e.idpessoa+', 2, '+tipoMidiaAumentar+')" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUMENTAR</a>';
+              } else {
+                linhas += '<a></a>';
+              } 
+
             linhas += '</td>';
             linhas += '<td>';
               linhas += '<div onclick="sobeFoto('+e.idpessoa+', 3)" style="border: 1px solid;display: flex;align-items: center;border-radius: 10px;padding-left: 15px;padding-right: 15px;user-select: none;cursor: pointer;">';
@@ -539,11 +557,19 @@
                     } else {
 
                       linhas += '<video src="'+retornaMidias(e.idpessoa, 3)+'" style="width: inherit;height:60px;display:inherit;position: inherit;" autoplay muted loop></video>';
+                      tipoMidiaAumentar = 2;
                     }
                   } 
 
                 linhas += '</div>';
               linhas += '</div>';
+
+              if (typeof retornaMidias(e.idpessoa, 3) != 'undefined') {
+                linhas += '<a onclick="aumentar('+e.idpessoa+', 3, '+tipoMidiaAumentar+')" style="cursor:pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUMENTAR</a>';
+              } else {
+                linhas += '<a></a>';
+              } 
+
             linhas += '</td>';
             
             if (typeof retornaMidias(e.idpessoa, 4) == 'undefined') {
@@ -551,7 +577,13 @@
               linhas += '<td></td>';
 
             } else {
-              linhas += '<td><video src="data:video/webm;base64,'+retornaMidias(e.idpessoa, 4)+'" style="width: inherit;display:inherit;position: inherit;height:60px;" autoplay muted loop></video></td>';
+              linhas += '<td><video src="data:video/webm;base64,'+retornaMidias(e.idpessoa, 4)+'" style="width: inherit;display:inherit;position: inherit;height:60px;" autoplay muted loop></video>';
+              if (typeof retornaMidias(e.idpessoa, 3) != 'undefined') {
+                linhas += '<a onclick="aumentar('+e.idpessoa+', 4, 3)" style="cursor:pointer;">AUMENTAR</a>';
+              } else {
+                linhas += '<a></a>';
+              }
+              linhas += '</td>';
             }
             
             if (totalUploads == 3) {
@@ -879,6 +911,32 @@
         var hoje = new Date();
         saveAs(content, dados.usuario+"_"+dados.idempresa+"_"+hoje.getTime()+".zip");
       });
+    }
+
+    function aumentar(idpessoa, posicao, tipo) {
+      
+      fecharModal();
+      var modal = '<div id="modalAumentar">';
+        modal += '<a onclick="fecharModal()">X</a>';
+
+        if (tipo == 1) {
+
+          modal += '<img src="'+retornaMidias(idpessoa, posicao)+'">';
+        } else if (tipo == 2) {
+          modal += '<video src="'+retornaMidias(idpessoa, posicao)+'" style="display:inherit;position: inherit;width:inherit;" autoplay muted loop></video>';
+        } else if (tipo == 3) {
+          modal += '<video src="data:video/webm;base64,'+retornaMidias(idpessoa, posicao)+'" style="display:inherit;position: inherit;width:inherit;" autoplay muted loop></video>';
+        }
+      modal += '</div>';
+
+      $('body').append(modal);
+      $('#modalAumentar').css('width', $(window).width().toString()+'px');
+      $('#modalAumentar').css('height', $(window).height().toString()+'px');
+    }
+
+    function fecharModal() {
+      
+      $('#modalAumentar').remove();
     }
 
   </script>
