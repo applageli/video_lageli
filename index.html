@@ -11,7 +11,7 @@
 </head>
 <body>
   
-  <div class="c" style="position: fixed;width: 100%;background: #0e0c0d;top: 0px;left: 0px;margin: 0;padding: 0;max-width: 100%;box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);">
+  <div class="c" style="position: fixed;width: 100%;background: #0e0c0d;top: 0px;left: 0px;margin: 0;padding: 0;max-width: 100%;box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);height: 54px">
 
     <div class="row" style="margin: 0;padding: 0;">
       <div class="1 col" style="margin: 0;padding: 0;">
@@ -19,12 +19,20 @@
       </div>  
       <div class="5 col" style="margin: 0;padding: 0;">
         <img src="img/logo.png" width="150" style="position: absolute;top: -4px" />
+        <div id="textoJogoTopo" style="display: none" align="center" class="row">
+          <div align="center" class="12 col">
+            <span style="color: #f1f1f0; position: absolute;top: 8px;">Para jogar clique em um quadrado do quadro abaixo e veja se encontra o <span style="color:#ff5b56;">❤</span> escondido!</span>
+          </div>
+        </div>
       </div>
       <div align="right" class="6 col" style="margin: 0;padding: 0;display: table-cell; vertical-align: middle;">
-        
-        <span id="escondeisso" style="font-family:Product Sans;display: none;color:#f1f1f0;">Bem vindo! <span id="botaoSairNome"></span>, </span> <a id="botaoSair" href="javascript: delete localStorage.dados;location.reload()" style="display: none;">sair</a>&nbsp;&nbsp;&nbsp;&nbsp;
-        <button onclick="exportar()" class="btn primary">download .zip</button>
-        
+        <span class="esconder_isso">
+          <span id="escondeisso" style="font-family:Product Sans;display: none;color:#f1f1f0;">Bem vindo! <span id="botaoSairNome"></span>, </span> <a id="botaoSair" href="javascript: delete localStorage.dados;location.reload()" style="display: none;">sair</a>&nbsp;&nbsp;&nbsp;&nbsp;
+          <button onclick="exportar()" class="btn primary">download .zip</button>
+        </span>
+
+        <span id="recebeQuantidadeTentativas" style="color: #ebaa92;font-size: 36px;display: none">5</span>
+        <button class="btn primary" id="btn-stop-recording" disabled style="display: none">Salvar Jogo</button>
       </div>
     </div>
 
@@ -96,7 +104,6 @@
     
     <div class="row">
       <div class="12 col">
-        <p id="textoJogo"></p>
       </div>
     </div>
     
@@ -105,13 +112,12 @@
         <!-- <button class="btn primary" id="btn-start-recording">Jogar</button> -->
       </div>
       <div class="3 col">        
-        <button class="btn primary" id="btn-stop-recording" disabled style="display: none">Salvar Jogo</button>
+        
       </div>
       <div class="8 col"></div>        
     </div>
     
     <div align="center" class="row">
-      <div id="recebeTotal" align="left" class="12 col">Tentativas: 0</div>
     </div>
 
     <div id="div_jogo" align="center" class="row">
@@ -315,31 +321,53 @@
 
     var mySwiper;
     var dados;
-    var arrayEmoji = ['👏','😔','☠','🎪','🤦','🏻','♂','🌿','😇','😶','👣','👻','🌭','🙃','🎈','👀','😡','😱','🏻','👩','🏻','🔧','🌂','👠','🎩','🐏','🦍','🌏','🌟','🌈','🔥','🍵','🍭','🎾','🥅','🚲','🚆','🚂','💻','🕰','📓','🔏','🈷','🏖','🚧'];
+    var arrayEmoji = ['❌'];
     var boolPlay = false;
     var musica = document.getElementById("musica"); 
     var selecionou = document.getElementById("selecionou"); 
     var boolCadastro = false;
     var telaAtual = 'login';
 
+    function mensagem(texto) {
+      
+      removeMensagem()
+
+      $('body').append(
+        '<div class="mensagens" style="width:100%;height:100%;position:fixed;top:-8px;left:0px;color:#f1f1f0;font-family: Product Sans;background: #0000008f;z-index:9999">'+
+          '<div style="position: absolute;left: 50%;top: 50%;-webkit-transform: translate(-50%, -50%);transform: translate(-50%, -50%);padding: 20px;border: 3px solid;background: black;">'+
+            '<p>'+texto+'</p><br>'+
+            '<p><button class="btn primary" type="button" onclick="removeMensagem()" style="position: relative;left: 84px;top: 19px;">FECHAR</p>'+
+          '</div>'+
+        '</div>'
+      )
+    }
+
+    function removeMensagem() {
+      $('.mensagens').remove()
+    }
+
     function jogar(id) {
 
-      $('#botaoVoltar').show();
-      telaAtual = 'jogo';
-      idpessoaSelecionado = id;
-      contaX = 0;
+      mensagem('Você tem 5 Tentativas!')
+      $('#recebeQuantidadeTentativas').show()
+      $('#textoJogoTopo').show()
+      $('.esconder_isso').hide()
+      $('#botaoVoltar').show()
+      telaAtual = 'jogo'
+      idpessoaSelecionado = id
+      contaX = 0
 
-      var linhas = '';
+      var linhas = ''
 
-      linhas += '<div class="swiper-slide">';
-      var tipoMidia1 = retornaMidias(id, 1).split(';')[0].split('/')[1];
+      linhas += '<div class="swiper-slide">'
+      var tipoMidia1 = retornaMidias(id, 1).split(';')[0].split('/')[1]
 
       if ((tipoMidia1 == 'jpg')||(tipoMidia1 == 'jpeg')||(tipoMidia1 == 'png')||(tipoMidia1 == 'gif')) {
 
-        linhas += '<img src="'+retornaMidias(id, 1)+'" width="200" />';
+        linhas += '<img src="'+retornaMidias(id, 1)+'" width="200" />'
       } else {
 
-        linhas += '<video src="'+retornaMidias(id, 1)+'" style="display:inherit;position: inherit;" muted autoplay loop></video>';
+        linhas += '<video src="'+retornaMidias(id, 1)+'" style="display:inherit;position: inherit;" muted autoplay loop></video>'
       }
       linhas += '</div>';
 
@@ -628,6 +656,8 @@
       if (typeof localStorage.dados != 'undefined') {
         
         dados = JSON.parse(localStorage.dados);
+        $('#textoJogoTopo').hide()
+        $('.esconder_isso').show()
         $('#telaLogin').hide();
         $('#telaCadastro').show();
         $('#botaoSair').show();
@@ -651,6 +681,10 @@
         $('#selectConsultoras').html(linhas);
         $('#selectConsultorasCadastro').html(linhas);
         telaAtual = 'cadastro';
+        
+        $('#textoJogoTopo').hide()
+        $('.esconder_isso').show()
+
         ldb.get('arrayDados', function(value) {
 
           var auxArrayDados = JSON.parse(value);
@@ -759,20 +793,26 @@
       $('#btn-stop-recording').hide();
       $('#recebeTotal').html('Tentativas: 0');
       $('#div_fotos').find('div').html('');
+      $('#recebeQuantidadeTentativas').hide()
+      $('#botaoVoltar').hide()
+      $('.esconder_isso').show()
+      $('body').css('background', '#f1f1f0')
+
     };
 
     var contaX = 0;
     $('.quadradoClicavel').click(function() {
-      
+
       if (boolPlay === true) {
 
-        if (contaX <= 19) {
+        if (contaX <= 4) {
 
           if ($(this).html().length == 0) {
 
             selecionou.pause();
             selecionou.play();
-            $(this).html( arrayEmoji[ numeroRandomico(0,45) ] );
+            $(this).html( '❌' );
+            $('#recebeQuantidadeTentativas').html( 4 - (contaX) )
           }
         }
 
@@ -786,10 +826,11 @@
 
         $('#recebeTotal').html('Tentativas: '+(contaX).toString());
 
-        if (contaX === 20) {
+        if (contaX === 5) {
           
           setTimeout(function() {
 
+            $('body').css('background', '#0E0C0D')
             telaAtual = 'slide';
             $('#div_jogo').hide();
             $('#div_fotos').show(); 
@@ -797,7 +838,10 @@
             $('#textoJogo').html('Você não econtrou o <span style="color:#ff5b56;">❤</span> Lageli, mas você já tinha ele!');
             $('#btn-start-recording').hide();
             $('#btn-stop-recording').show();
-            
+            $('#textoJogoTopo').hide()
+            mensagem('Você não encontrou o coração Lageli, porque você já tinha o seu!')
+            $('#recebeQuantidadeTentativas').hide()
+
             musica.play();
             if (typeof mySwiper != 'undefined') {
 
@@ -811,7 +855,7 @@
                 disableOnInteraction: false,
               },
               loop: true,
-              // effect: 'flip' //fade, cube, coverflow, flip
+              // effect: 'fade' //fade, cube, coverflow, flip
             });
           },3600);
         }
@@ -952,10 +996,13 @@
     }
 
     function voltar() {
+      $('body').css('background', '#f1f1f0')
+      console.log(telaAtual)
+
       if (telaAtual == 'slide') {
         jogar(idpessoaSelecionado);
         $('#recebeTotal').show();
-        $('#textoJogo').html('Para jogar clique em um quadrado do quadro abaixo e veja se encontra o <span style="color:#ff5b56;">❤</span> escondido!');
+        
         $('#btn-stop-recording').hide();
         $('#recebeTotal').html('Tentativas: 0');
       } else if (telaAtual == 'jogo') {
@@ -964,9 +1011,14 @@
         $('#segundaTela').hide();
         $('#div_jogo').hide();
         $('#div_fotos').hide();
+        $('#textoJogoTopo').hide()
+        $('.esconder_isso').show()
 
         boolPlay = false;
-        recorder.destroy();
+        if (typeof recorder != 'undefined') {
+
+          recorder.destroy()
+        }
 
         $('#telaCadastro').show();
         $('#div_fotos').hide();
@@ -975,11 +1027,13 @@
         musica.currentTime = 0;
         boolCadastro = true;
         $('#recebeTotal').show();
-        $('#textoJogo').html('Para jogar clique em um quadrado do quadro abaixo e veja se encontra o <span style="color:#ff5b56;">❤</span> escondido!');
+        
         $('#btn-stop-recording').hide();
         $('#recebeTotal').html('Tentativas: 0');
         $('#div_fotos').find('div').html('');
-      } 
+      }  
+        // $('#textoJogoTopo').hide()
+        // $('.esconder_isso').show()
     }
   </script>
 </body>
