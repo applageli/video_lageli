@@ -31,7 +31,7 @@
           <button onclick="exportar()" class="btn primary">download .zip</button>
         </span>
 
-        <span id="recebeQuantidadeTentativas" style="color: #7c0000;font-size: 36px;display: none">5</span>
+        <span id="recebeQuantidadeTentativas" style="color: #ebaa92;font-size: 36px;display: none">5</span>
         <button class="btn primary" id="btn-stop-recording" disabled style="display: none">Salvar Jogo</button>
       </div>
     </div>
@@ -291,8 +291,12 @@
       </div>
     </div>
 
-    <div id="div_fotos" class="swiper-container" style="display: none;">
+    <!-- <div id="div_fotos" class="swiper-container" style="display: none;">
       <div class="swiper-wrapper"></div>
+    </div> -->
+    <div id="div_fotos" class="slides">
+      <div class="slide" style="background-image:url('https://static.impression.co.uk/2018/02/css-mask-slideshow-image-1.jpg')"></div>
+      <div class="slide" style="background-image:url('https://static.impression.co.uk/2018/02/css-mask-slideshow-image-2.jpg')"></div>
     </div>
 
   </div>
@@ -345,8 +349,10 @@
     function removeMensagem(play) {
       
       $('.mensagens').remove()
+
       if (play == true) {
-        // $('body').css('background', '#0E0C0D')
+
+        $('body').css('background', '#0E0C0D')
         telaAtual = 'slide';
         $('#div_jogo').hide();
         $('#div_fotos').show(); 
@@ -358,20 +364,43 @@
         $('#recebeQuantidadeTentativas').hide()
 
         musica.play();
-        if (typeof mySwiper != 'undefined') {
+        
+        var slides = document.querySelectorAll('.slide');
+        var current = 0;
+        var next = 1;
+        var max = slides.length - 1;
+        slides[current].classList.add('current');
+        slides[next].classList.add('next');
+        setInterval(function() {
+          slides[current].classList.add('mask');
+          setTimeout(function() {
+            slides[current].classList.remove('mask', 'current');
+            slides[next].classList.add('current');
+            slides[next].classList.remove('next');
+            current = next;
+            if ( next < max ) {
+              next++;
+            } else {
+              next = 0;
+            }
+            slides[next].classList.add('next');
+          }, 1000); // 1000 = transition time
+        }, 3000); // 3000 = active slide time
 
-          mySwiper.destroy();
-        }
-        mySwiper = new Swiper ('.swiper-container', {
-          centeredSlides: true
-          ,
-          autoplay: {
-            delay: 2500,
-            disableOnInteraction: false,
-          },
-          loop: true,
-          // effect: 'fade' //fade, cube, coverflow, flip
-        });
+        // if (typeof mySwiper != 'undefined') {
+
+        //   mySwiper.destroy();
+        // }
+        // mySwiper = new Swiper ('.swiper-container', {
+        //   centeredSlides: true
+        //   ,
+        //   autoplay: {
+        //     delay: 2500,
+        //     disableOnInteraction: false,
+        //   },
+        //   loop: true,
+        //   // effect: 'fade' //fade, cube, coverflow, flip
+        // });
       }
     }
 
@@ -388,7 +417,7 @@
 
       var linhas = ''
 
-      linhas += '<div class="swiper-slide">'
+      linhas += '<div class="slide">'
       var tipoMidia1 = retornaMidias(id, 1).split(';')[0].split('/')[1]
 
       if ((tipoMidia1 == 'jpg')||(tipoMidia1 == 'jpeg')||(tipoMidia1 == 'png')||(tipoMidia1 == 'gif')) {
@@ -400,7 +429,7 @@
       }
       linhas += '</div>';
 
-      linhas += '<div class="swiper-slide">';
+      linhas += '<div class="slide">';
       var tipoMidia2 = retornaMidias(id, 2).split(';')[0].split('/')[1];
 
       if ((tipoMidia2 == 'jpg')||(tipoMidia2 == 'jpeg')||(tipoMidia2 == 'png')||(tipoMidia2 == 'gif')) {
@@ -412,7 +441,7 @@
       }
       linhas += '</div>';
 
-      linhas += '<div class="swiper-slide">';
+      linhas += '<div class="slide">';
       var tipoMidia3 = retornaMidias(id, 3).split(';')[0].split('/')[1];
 
       if ((tipoMidia3 == 'jpg')||(tipoMidia3 == 'jpeg')||(tipoMidia3 == 'png')||(tipoMidia3 == 'gif')) {
@@ -425,7 +454,8 @@
       linhas += '</div>';
 
 
-      $('#div_fotos').find('div').html(linhas);
+      // $('#div_fotos').find('div').html(linhas);
+      $('#div_fotos').html(linhas)
 
       $('#telaCadastro').hide();
       $('#segundaTela').show();
@@ -825,7 +855,7 @@
       $('#recebeQuantidadeTentativas').hide()
       $('#botaoVoltar').hide()
       $('.esconder_isso').show()
-      // $('body').css('background', '#f1f1f0')
+      $('body').css('background', '#f1f1f0')
 
     };
 
@@ -857,7 +887,7 @@
 
         if (contaX === 5) {
           
-          mensagem('Você não precisa mais procurar o amor, você o econtrou no dia em que nos conhecemos... Te amo!', true)
+          mensagem('Você não encontrou o coração Lageli, porque você já tinha o seu!', true)
         }
       }
     });
@@ -996,7 +1026,7 @@
     }
 
     function voltar() {
-      // $('body').css('background', '#f1f1f0')
+      $('body').css('background', '#f1f1f0')
       console.log(telaAtual)
 
       if (telaAtual == 'slide') {
