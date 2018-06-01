@@ -291,17 +291,20 @@
       </div>
     </div>
 
-    <div id="div_fotos" class="swiper-container" style="display: none;">
-      <div class="swiper-wrapper"></div>
+    <div id="div_fotos" style="width: 568px;height: 568px;position: relative;left: 21%;top: -43px;display: none;">
+      <div class="container"></div>
     </div>
-
+    
   </div>
 
-  <video controls autoplay></video>
+  <video controls autoplay style="display: none"></video>
   
   <audio id="musica">
-    <source src="media/lageli.ogg" type="audio/ogg">
-    <source src="media/lageli.mp3" type="audio/mpeg">
+    <!-- <source src="media/lageli.ogg" type="audio/ogg">
+    <source src="media/lageli.mp3" type="audio/mpeg"> -->
+
+    <source src="media/musica1.ogg" type="audio/ogg">
+    <source src="media/musica1.mp3" type="audio/mpeg">
   </audio>
 
   <audio id="selecionou">
@@ -331,53 +334,150 @@
     function mensagem(texto, play) {
       
       removeMensagem()
+      var mensagem = ''
 
-      $('body').append(
-        '<div class="mensagens" style="width:100%;height:100%;position:fixed;top:-8px;left:0px;color:#f1f1f0;font-family: Product Sans;background: #0000008f;z-index:9999">'+
-          '<div style="position: absolute;left: 50%;top: 50%;-webkit-transform: translate(-50%, -50%);transform: translate(-50%, -50%);padding: 20px;border: 3px solid;background: black;">'+
-            '<p>'+texto+'</p><br>'+
-            '<p><button class="btn primary" type="button" onclick="removeMensagem('+play+')" style="position: relative;left: 84px;top: 19px;">FECHAR</p>'+
-          '</div>'+
-        '</div>'
-      )
+      mensagem += '<div class="mensagens" style="width:100%;height:100%;position:fixed;top:-8px;left:0px;color:#f1f1f0;font-family: Product Sans;background: #0000008f;z-index:9999">';
+      mensagem += '<div style="position: absolute;left: 50%;top: 50%;-webkit-transform: translate(-50%, -50%);transform: translate(-50%, -50%);padding: 20px;border: 3px solid;background: black;">';
+        mensagem += '<p>'+texto+'</p><br>';
+      console.log(play)
+      if (play === false) {
+
+      mensagem += '<p><button class="btn primary" type="button" onclick="removeMensagem()" style="position: relative;left: 84px;top: 19px;">FECHAR</p>';
+      } else {
+        mensagem += '<p id="contador" style="text-align: center;font-size: 40px;">10</p>'
+
+        setTimeout(function() {
+          $('#contador').html(9)
+        },1000)
+        setTimeout(function() {
+          $('#contador').html(8)
+        },2000)
+        setTimeout(function() {
+          $('#contador').html(7)
+        },3000)
+        setTimeout(function() {
+          $('#contador').html(6)
+        },4000)
+        setTimeout(function() {
+          $('#contador').html(5)
+        },5000)
+        setTimeout(function() {
+          $('#contador').html(4)
+        },6000)
+        setTimeout(function() {
+          $('#contador').html(3)
+        },7000)
+        setTimeout(function() {
+          $('#contador').html(2)
+        },8000)
+        setTimeout(function() {
+          $('#contador').html(1)
+        },9000)
+
+        setTimeout(function() {
+
+          $('#contador').html(0)
+          telaAtual = 'slide'
+          $('#div_jogo').hide()
+          $('#div_fotos').show();
+          $('#recebeTotal').hide()
+          boolSlide = true
+          initSlide()
+          $('#btn-start-recording').hide()
+          $('#btn-stop-recording').show()
+          $('#textoJogoTopo').hide()
+          $('#recebeQuantidadeTentativas').hide()
+          musica.play()
+          removeMensagem()
+        },10000)
+      }
+
+      mensagem += '</div></div>'
+
+      $('body').append(mensagem)
+    }
+    var boolSlide = true
+
+    function breakSlide() {
+      boolSlide = false
+      $('.slide').each(function() {
+        if ($(this).hasClass('imagens') === false) {
+          this.pause()
+          this.currentTime = 0
+        }
+
+        this.style.opacity=0
+      })
     }
 
-    function removeMensagem(play) {
+    function removeMensagem() {
       
       $('.mensagens').remove()
-      if (play == true) {
-        // $('body').css('background', '#0E0C0D')
-        telaAtual = 'slide';
-        $('#div_jogo').hide();
-        $('#div_fotos').show(); 
-        $('#recebeTotal').hide();
-        $('#textoJogo').html('Você não econtrou o <span style="color:#ff5b56;">❤</span> Lageli, mas você já tinha ele!');
-        $('#btn-start-recording').hide();
-        $('#btn-stop-recording').show();
-        $('#textoJogoTopo').hide()
-        $('#recebeQuantidadeTentativas').hide()
+    }
 
-        musica.play();
-        if (typeof mySwiper != 'undefined') {
+    var tempos = []
 
-          mySwiper.destroy();
+    function getMilliSeconds(num) {
+      return num * 1000
+    }
+
+    function initSlide() {
+
+      tempos = []
+      $('.slide').each(function() {
+        if ($(this).hasClass('imagens') === false) {
+          tempos.push(getMilliSeconds(this.duration))
+          this.pause()
+          this.currentTime = 0
+        } else {
+          tempos.push(5000)
         }
-        mySwiper = new Swiper ('.swiper-container', {
-          centeredSlides: true
-          ,
-          autoplay: {
-            delay: 2500,
-            disableOnInteraction: false,
-          },
-          loop: true,
-          // effect: 'fade' //fade, cube, coverflow, flip
-        });
+
+        this.style.opacity=0
+      })
+
+      if (boolSlide === true) {
+
+        mostraVideo(0)
       }
+    }
+
+    function mostraVideo(i) {
+
+      $('.slide').each(function() {
+        if ($(this).hasClass('imagens') === false) {
+          this.pause()
+          this.currentTime = 0
+        }
+
+        this.style.opacity=0
+      })
+
+      $('.slide')[i].style.opacity=1
+      if ($('.slide')[i].className.indexOf('imagens') < 0) {
+        $('.slide')[i].play()
+      }
+
+      var tempo = tempos[i]
+      setTimeout(function() {
+        i++
+        if (i <= 2) {
+
+          if ($('.slide')[i-1].className.indexOf('imagens') < 0) {
+            $('.slide')[i-1].pause()
+            $('.slide')[i-1].currentTime = 0
+          }
+          $('.slide')[i-1].style.opacity=1
+          mostraVideo(i)
+        } else {
+          initSlide()
+        }
+      }, tempo)
     }
 
     function jogar(id) {
 
-      mensagem('Você tem 5 Tentativas!')
+      mensagem('Você tem 5 Tentativas!', false)
       $('#recebeQuantidadeTentativas').show()
       $('#textoJogoTopo').show()
       $('.esconder_isso').hide()
@@ -388,44 +488,37 @@
 
       var linhas = ''
 
-      linhas += '<div class="swiper-slide">'
       var tipoMidia1 = retornaMidias(id, 1).split(';')[0].split('/')[1]
 
       if ((tipoMidia1 == 'jpg')||(tipoMidia1 == 'jpeg')||(tipoMidia1 == 'png')||(tipoMidia1 == 'gif')) {
 
-        linhas += '<img src="'+retornaMidias(id, 1)+'" width="200" />'
+        linhas += '<img src="'+retornaMidias(id, 1)+'" class="imagens slide" id="midia1" style="opacity:0;">'
       } else {
 
-        linhas += '<video src="'+retornaMidias(id, 1)+'" style="display:inherit;position: inherit;" muted autoplay loop></video>'
+        linhas += '<video src="'+retornaMidias(id, 1)+'" class="slide" id="midia1" muted style="opacity:0;"></video>'
       }
-      linhas += '</div>';
-
-      linhas += '<div class="swiper-slide">';
+      
       var tipoMidia2 = retornaMidias(id, 2).split(';')[0].split('/')[1];
 
       if ((tipoMidia2 == 'jpg')||(tipoMidia2 == 'jpeg')||(tipoMidia2 == 'png')||(tipoMidia2 == 'gif')) {
 
-        linhas += '<img src="'+retornaMidias(id, 2)+'" width="200" />';
+        linhas += '<img src="'+retornaMidias(id, 2)+'" class="imagens slide" id="midia2" style="opacity:0;">'
       } else {
 
-        linhas += '<video src="'+retornaMidias(id, 2)+'" style="display:inherit;position: inherit;" muted autoplay loop></video>';
+        linhas += '<video src="'+retornaMidias(id, 2)+'" class="slide" id="midia2" muted style="opacity:0;"></video>'
       }
-      linhas += '</div>';
-
-      linhas += '<div class="swiper-slide">';
+      
       var tipoMidia3 = retornaMidias(id, 3).split(';')[0].split('/')[1];
 
       if ((tipoMidia3 == 'jpg')||(tipoMidia3 == 'jpeg')||(tipoMidia3 == 'png')||(tipoMidia3 == 'gif')) {
 
-        linhas += '<img src="'+retornaMidias(id, 3)+'" width="200" />';
+        linhas += '<img src="'+retornaMidias(id, 3)+'" class="imagens slide" id="midia3" style="opacity:0;">'
       } else {
 
-        linhas += '<video src="'+retornaMidias(id, 3)+'" style="display:inherit;position: inherit;" muted autoplay loop></video>';
+        linhas += '<video src="'+retornaMidias(id, 3)+'" class="slide" id="midia3" muted style="opacity:0;"></video>'
       }
-      linhas += '</div>';
 
-
-      $('#div_fotos').find('div').html(linhas);
+      $('#div_fotos').html(linhas);
 
       $('#telaCadastro').hide();
       $('#segundaTela').show();
@@ -996,44 +1089,33 @@
     }
 
     function voltar() {
-      // $('body').css('background', '#f1f1f0')
-      console.log(telaAtual)
+      
+      $('#recebeQuantidadeTentativas').hide()
+      breakSlide()
+      $('#botaoVoltar').hide()
+      $('#telaCadastro').show()
+      $('#segundaTela').hide()
+      $('#div_jogo').hide()
+      $('#div_fotos').hide()
+      $('#textoJogoTopo').hide()
+      $('.esconder_isso').show()
 
-      if (telaAtual == 'slide') {
-        jogar(idpessoaSelecionado);
-        $('#recebeTotal').show();
-        
-        $('#btn-stop-recording').hide();
-        $('#recebeTotal').html('Tentativas: 0');
-      } else if (telaAtual == 'jogo') {
-        $('#botaoVoltar').hide();
-        $('#telaCadastro').show();
-        $('#segundaTela').hide();
-        $('#div_jogo').hide();
-        $('#div_fotos').hide();
-        $('#textoJogoTopo').hide()
-        $('.esconder_isso').show()
+      boolPlay = false;
+      if (typeof recorder != 'undefined') {
 
-        boolPlay = false;
-        if (typeof recorder != 'undefined') {
+        recorder.destroy()
+      }
 
-          recorder.destroy()
-        }
-
-        $('#telaCadastro').show();
-        $('#div_fotos').hide();
-        $('#segundaTela').hide();
-        musica.pause();
-        musica.currentTime = 0;
-        boolCadastro = true;
-        $('#recebeTotal').show();
-        
-        $('#btn-stop-recording').hide();
-        $('#recebeTotal').html('Tentativas: 0');
-        $('#div_fotos').find('div').html('');
-      }  
-        // $('#textoJogoTopo').hide()
-        // $('.esconder_isso').show()
+      $('#telaCadastro').show()
+      $('#div_fotos').hide()
+      $('#segundaTela').hide()
+      musica.pause()
+      musica.currentTime = 0
+      boolCadastro = true
+      $('#recebeTotal').show()
+      $('#btn-stop-recording').hide()
+      $('#recebeTotal').html('Tentativas: 0')
+      $('#div_fotos').html('')
     }
   </script>
 </body>
